@@ -1,103 +1,167 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Sparkles, Loader2 } from 'lucide-react'
-import { useAuth } from '@/hooks/useAuth'
-import { toast } from 'sonner'
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
+import { TOAST_CONFIG } from "@/lib/utils";
+import Image from "next/image";
+
+type LoginFormInputs = {
+  email: string;
+  password: string;
+};
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  
-  const { signIn } = useAuth()
-  const router = useRouter()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormInputs>();
+  const { signIn, signInWithGoogle } = useAuth();
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
-
+  const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const { error } = await signIn(email, password)
-      if (error) throw error
-      
-      toast.success('Welcome back!')
-      router.push('/')
+      const { error } = await signIn(data.email, data.password);
+      if (error) throw error;
+
+      toast.success("Login successful, welcome back!", {
+        ...TOAST_CONFIG.success,
+      });
+      router.push("/");
     } catch (error: any) {
-      toast.error(error.message || 'Failed to sign in')
-    } finally {
-      setLoading(false)
+      toast.error(error.message || "Failed to sign in", {
+        ...TOAST_CONFIG.error,
+      });
     }
-  }
+  };
+
+  const handleGoogleSignIn = async () => {
+    await signInWithGoogle();
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 drop-shadow-lg">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-lg">
-              <Sparkles className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              FitItOn.io
-            </span>
+            <Image
+              height={180}
+              width={180}
+              src="/logo.png"
+              alt="fit-it-on-logo"
+            />
           </div>
-          <CardTitle>Welcome Back</CardTitle>
-          <p className="text-gray-600">Sign in to continue your virtual try-on journey</p>
+          <CardTitle>Welcome Back!</CardTitle>
+          <p className="text-gray-800">
+            Sign in to continue your virtual try-on journey
+          </p>
         </CardHeader>
-        
+
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex gap-4 flex-col">
+            {/* Sign in with Google */}
+            <Button
+              onClick={handleGoogleSignIn}
+              variant="outline"
+              className="w-full flex  items-center justify-center gap-2 "
+            >
+              <Image
+                alt="google-logo"
+                height={30}
+                width={30}
+                src={
+                  "https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
+                }
+              ></Image>
+              Sign in with Google
+            </Button>
+            {/* Sign in with Facebook */}
+            <Button
+              onClick={handleGoogleSignIn}
+              variant="outline"
+              className="w-full flex  items-center justify-center gap-2 "
+            >
+              <Image
+                alt="facebook-logo"
+                height={30}
+                width={30}
+                src={
+                  "https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
+                }
+              ></Image>
+              Sign in with Facebook
+            </Button>
+          </div>
+          {/* Divider */}
+          <div className="flex items-center justify-center my-4">
+            <div className="flex-grow h-px bg-gray-300" />
+            <span className="px-3 text-gray-500 text-md">or</span>
+            <div className="flex-grow h-px bg-gray-300" />
+          </div>
+
+          {/* Email/password form */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
                 placeholder="Enter your email"
+                {...register("email", { required: "Email is required" })}
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
-            
+
             <div>
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
                 placeholder="Enter your password"
+                {...register("password", { required: "Password is required" })}
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-            
-            <Button 
-              type="submit" 
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-              disabled={loading}
+
+            <Button
+              type="submit"
+              className="w-full bg-primary"
+              disabled={isSubmitting}
             >
-              {loading ? (
+              {isSubmitting ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <AiOutlineLoading3Quarters className="animate-spin h-4 w-4 mr-2" />
                   Signing in...
                 </>
               ) : (
-                'Sign In'
+                <>Sign In</>
               )}
             </Button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-purple-600 hover:underline">
+              Don't have an account?{" "}
+              <Link
+                href="/signup"
+                className="text-secondary hover:underline font-bold"
+              >
                 Sign up for free
               </Link>
             </p>
@@ -105,5 +169,5 @@ export default function LoginPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
