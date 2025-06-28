@@ -1,54 +1,78 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Sparkles, Menu, X, User, LogOut } from 'lucide-react'
-import { useAuth } from '@/hooks/useAuth'
-import { useTrials } from '@/hooks/useTrials'
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Sparkles, Menu, X, User, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useTrials } from "@/hooks/useTrials";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from "@/components/ui/dropdown-menu";
+import Image from "next/image";
+import { GiClothes } from "react-icons/gi";
+import { IoIosPricetags } from "react-icons/io";
+import { BsQuestionDiamondFill } from "react-icons/bs";
+import { GrGallery } from "react-icons/gr";
 
 export function Navbar() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, signOut } = useAuth()
-  const { remainingTrials } = useTrials()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const { remainingTrials } = useTrials();
 
   const handleSignOut = async () => {
-    await signOut()
-    setMobileMenuOpen(false)
-  }
-
+    await signOut();
+    setMobileMenuOpen(false);
+  };
+  console.log(user);
   return (
     <nav className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-lg">
-              <Sparkles className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              FitItOn.io
-            </span>
+            <Image
+              height={120}
+              width={120}
+              src="/logo.png"
+              alt="fit-it-on-logo"
+            />
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-purple-600 transition-colors">
-              Try On
+            <Link
+              href="/"
+              className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+            >
+              <GiClothes className="size-5" />
+              Studio
             </Link>
             {user && (
-              <Link href="/gallery" className="text-gray-700 hover:text-purple-600 transition-colors">
+              <Link
+                href="/gallery"
+                className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+              >
+                <GrGallery className="size-5" />
                 Gallery
               </Link>
             )}
-            <Link href="/pricing" className="text-gray-700 hover:text-purple-600 transition-colors">
+            <Link
+              href="/pricing"
+              className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+            >
+              <IoIosPricetags className="size-5" />
               Pricing
+            </Link>
+            <Link
+              href="/pricing"
+              className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+            >
+              <BsQuestionDiamondFill className="size-5" />
+              FAQs
             </Link>
           </div>
 
@@ -63,16 +87,33 @@ export function Navbar() {
                 )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="gap-2">
-                      <User className="h-4 w-4" />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="gap-2 cursor-pointer"
+                    >
+                      {user.user_metadata.avatar_url ? (
+                        <Image
+                          src={user.user_metadata.avatar_url}
+                          height={20}
+                          width={20}
+                          className="rounded-full"
+                          alt="user-image"
+                        />
+                      ) : (
+                        <User className="h-4 w-4" />
+                      )}
                       Account
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild className="gap-2 cursor-pointer">
                       <Link href="/account">Profile</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={handleSignOut} className="gap-2">
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="gap-2 cursor-pointer"
+                    >
                       <LogOut className="h-4 w-4" />
                       Sign Out
                     </DropdownMenuItem>
@@ -81,10 +122,10 @@ export function Navbar() {
               </>
             ) : (
               <>
-                <Button variant="ghost" asChild>
+                <Button variant="ghost" asChild className="hover:bg-gray-200">
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button asChild>
+                <Button asChild className="bg-black hover:bg-black/90">
                   <Link href="/signup">Get Started</Link>
                 </Button>
               </>
@@ -98,7 +139,11 @@ export function Navbar() {
               size="sm"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
           </div>
         </div>
@@ -109,16 +154,16 @@ export function Navbar() {
         <div className="md:hidden border-t bg-white/95 backdrop-blur-md">
           <div className="px-4 py-6 space-y-4">
             <Link
-              href="/"
-              className="block text-gray-700 hover:text-purple-600 transition-colors"
+              href="/studio"
+              className="block text-gray-700 hover:text-secondary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Try On
+              Studio
             </Link>
             {user && (
               <Link
                 href="/gallery"
-                className="block text-gray-700 hover:text-purple-600 transition-colors"
+                className="block text-gray-700 hover:text-secondary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Gallery
@@ -126,12 +171,18 @@ export function Navbar() {
             )}
             <Link
               href="/pricing"
-              className="block text-gray-700 hover:text-purple-600 transition-colors"
+              className="block text-gray-700 hover:text-secondary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Pricing
             </Link>
-            
+            <Link
+              href="/pricing"
+              className="text-gray-700 hover:text-secondary transition-colors "
+            >
+              FAQs
+            </Link>
+
             {user ? (
               <>
                 {remainingTrials !== Infinity && (
@@ -141,7 +192,7 @@ export function Navbar() {
                 )}
                 <Link
                   href="/account"
-                  className="block text-gray-700 hover:text-purple-600 transition-colors"
+                  className="block text-gray-700 hover:text-secondary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Account
@@ -173,5 +224,5 @@ export function Navbar() {
         </div>
       )}
     </nav>
-  )
+  );
 }
