@@ -71,7 +71,7 @@ export default function LoginPage() {
             <Button
               onClick={handleGoogleSignIn}
               variant="outline"
-              className="w-full flex  items-center justify-center gap-2 "
+              className="w-full flex  items-center justify-center gap-2 cursor-pointer"
             >
               <Image
                 alt="google-logo"
@@ -80,14 +80,14 @@ export default function LoginPage() {
                 src={
                   "https://img.icons8.com/?size=100&id=17949&format=png&color=000000"
                 }
-              ></Image>
+              />
               Sign in with Google
             </Button>
             {/* Sign in with Facebook */}
             <Button
               onClick={handleGoogleSignIn}
               variant="outline"
-              className="w-full flex  items-center justify-center gap-2 "
+              className="w-full flex  items-center justify-center gap-2 cursor-pointer"
             >
               <Image
                 alt="facebook-logo"
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 src={
                   "https://img.icons8.com/?size=100&id=118497&format=png&color=000000"
                 }
-              ></Image>
+              />
               Sign in with Facebook
             </Button>
           </div>
@@ -141,7 +141,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-primary"
+              className="w-full bg-primary cursor-pointer"
               disabled={isSubmitting}
             >
               {isSubmitting ? (
@@ -163,6 +163,16 @@ export default function LoginPage() {
                 className="text-secondary hover:underline font-bold"
               >
                 Sign up for free
+              </Link>
+            </p>
+          </div>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              <Link
+                href="/reset-password"
+                className="text-blue-500 underline hover:no-underline"
+              >
+                Forgot your password?
               </Link>
             </p>
           </div>

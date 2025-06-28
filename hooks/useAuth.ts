@@ -9,7 +9,6 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
     const getSession = async () => {
       const {
         data: { session },
@@ -20,7 +19,6 @@ export function useAuth() {
 
     getSession();
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -32,39 +30,41 @@ export function useAuth() {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { data, error };
+    return supabase.auth.signInWithPassword({ email, password });
   };
 
   const signInWithGoogle = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    return supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: `/`,
-      },
+      options: { redirectTo: `/` },
     });
-    return { data, error };
   };
 
-  const signUp = async (email: string, password: string, name?: string) => {
-    const { data, error } = await supabase.auth.signUp({
+  const signUp = async (email: string, password: string, name: string) => {
+    if (!name.trim()) throw new Error("Name is required");
+    return supabase.auth.signUp({
       email,
       password,
-      options: {
-        data: {
-          name: name || "",
-        },
-      },
+      options: { data: { name } },
     });
-    return { data, error };
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    return { error };
+    return supabase.auth.signOut();
+  };
+
+  const resetPassword = async (email: string) => {
+    return supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password/token`,
+    });
+  };
+
+  const setSession = async (access_token: string, refresh_token: string) => {
+    return supabase.auth.setSession({ access_token, refresh_token });
+  };
+
+  const updatePassword = async (password: string) => {
+    return supabase.auth.updateUser({ password });
   };
 
   return {
@@ -74,5 +74,8 @@ export function useAuth() {
     signInWithGoogle,
     signUp,
     signOut,
+    resetPassword,
+    setSession,
+    updatePassword,
   };
 }
