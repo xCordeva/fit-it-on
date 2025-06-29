@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
+import { adjustTrialCountIfAnonymousTrialUsed } from "@/lib/utils";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -21,9 +22,17 @@ export function useAuth() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
+
+      // If the user just signed in or signed up
+      if (
+        session?.user &&
+        (event === "SIGNED_IN" || event === "USER_UPDATED")
+      ) {
+        await adjustTrialCountIfAnonymousTrialUsed(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -42,11 +51,15 @@ export function useAuth() {
 
   const signUp = async (email: string, password: string, name: string) => {
     if (!name.trim()) throw new Error("Name is required");
-    return supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { name } },
     });
+    if (data?.user) {
+      await adjustTrialCountIfAnonymousTrialUsed(data.user.id);
+    }
+    return { data, error };
   };
 
   const signOut = async () => {

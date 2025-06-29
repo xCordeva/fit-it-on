@@ -28,7 +28,6 @@ export function Navbar() {
     setMobileMenuOpen(false);
   };
 
-  console.log(user);
   return (
     <nav className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
