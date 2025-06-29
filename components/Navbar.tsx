@@ -27,6 +27,7 @@ export function Navbar() {
     await signOut();
     setMobileMenuOpen(false);
   };
+
   console.log(user);
   return (
     <nav className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-50">
@@ -46,7 +47,7 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+              className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
             >
               <GiClothes className="size-5" />
               Studio
@@ -54,7 +55,7 @@ export function Navbar() {
             {user && (
               <Link
                 href="/gallery"
-                className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+                className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
               >
                 <GrGallery className="size-5" />
                 Gallery
@@ -62,14 +63,14 @@ export function Navbar() {
             )}
             <Link
               href="/pricing"
-              className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+              className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
             >
               <IoIosPricetags className="size-5" />
               Pricing
             </Link>
             <Link
               href="/pricing"
-              className="text-gray-700 hover:text-secondary transition-colors flex gap-1 items-center justify-center "
+              className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
             >
               <BsQuestionDiamondFill className="size-5" />
               FAQs
@@ -155,7 +156,7 @@ export function Navbar() {
           <div className="px-4 py-6 space-y-4">
             <Link
               href="/studio"
-              className="block text-gray-700 hover:text-secondary transition-colors"
+              className="block text-gray-700 hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Studio
@@ -163,7 +164,7 @@ export function Navbar() {
             {user && (
               <Link
                 href="/gallery"
-                className="block text-gray-700 hover:text-secondary transition-colors"
+                className="block text-gray-700 hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Gallery
@@ -171,14 +172,14 @@ export function Navbar() {
             )}
             <Link
               href="/pricing"
-              className="block text-gray-700 hover:text-secondary transition-colors"
+              className="block text-gray-700 hover:text-primary transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Pricing
             </Link>
             <Link
               href="/pricing"
-              className="text-gray-700 hover:text-secondary transition-colors "
+              className="text-gray-700 hover:text-primary transition-colors "
             >
               FAQs
             </Link>
@@ -192,7 +193,7 @@ export function Navbar() {
                 )}
                 <Link
                   href="/account"
-                  className="block text-gray-700 hover:text-secondary transition-colors"
+                  className="block text-gray-700 hover:text-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Account
