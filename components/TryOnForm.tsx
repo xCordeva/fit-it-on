@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TOAST_CONFIG } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import { useModalStore } from "@/stores/useModalStore";
 
 interface TryOnFormProps {
   onResult: (result: {
@@ -25,8 +26,12 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
   const [personImage, setPersonImage] = useState<File | null>(null);
   const [garmentImage, setGarmentImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showSignInModal, setShowSignInModal] = useState(false);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const {
+    showSignInModal,
+    setShowSignInModal,
+    showUpgradeModal,
+    setShowUpgradeModal,
+  } = useModalStore();
   const [personDragCounter, setPersonDragCounter] = useState(0);
   const [garmentDragCounter, setGarmentDragCounter] = useState(0);
 
@@ -67,9 +72,18 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
     if (!canTryOn) {
       if (!user) {
         setShowSignInModal(true);
+        toast.error(
+          "You’ve reached your free trial limit. Create an account to keep trying on outfits!",
+          { ...TOAST_CONFIG.error }
+        );
+
         return;
       } else {
         setShowUpgradeModal(true);
+        toast.error(
+          "Looks like you’ve used all your free tries. Upgrade to Pro and enjoy unlimited try-ons!",
+          { ...TOAST_CONFIG.error }
+        );
         return;
       }
     }
