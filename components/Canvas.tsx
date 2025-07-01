@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { TryOnForm } from "@/components/TryOnForm";
 import { TryOnResult } from "@/components/TryOnResult";
+import { useModalStore } from "@/stores/useModalStore";
 
 interface TryOnResultData {
   inputUrl: string;
@@ -20,7 +21,7 @@ export default function Canvas() {
   const handleReset = () => {
     setResult(null);
   };
-
+  const { setShowUploadGuideModal } = useModalStore();
   return (
     <main className=" border-2 bg-white shadow-xl rounded-lg w-full h-full flex justify-center p-6 py-10 overflow-auto">
       {!result ? (
@@ -28,6 +29,16 @@ export default function Canvas() {
           {/* Try-On Form */}
           <div className="w-full max-w-4xl mx-auto">
             <TryOnForm onResult={handleResult} />
+            <div>
+              <h2
+                className="text-gray-500 underline text-center cursor-pointer mt-6"
+                onClick={() => {
+                  setShowUploadGuideModal(true);
+                }}
+              >
+                Upload guide
+              </h2>
+            </div>
           </div>
         </>
       ) : (
