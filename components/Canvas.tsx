@@ -29,9 +29,9 @@ export default function Canvas() {
           {/* Try-On Form */}
           <div className="w-full max-w-4xl mx-auto">
             <TryOnForm onResult={handleResult} />
-            <div>
+            <div className="text-center mt-6">
               <h2
-                className="text-gray-500 underline text-center cursor-pointer mt-6"
+                className="text-gray-500 underline cursor-pointer inline"
                 onClick={() => {
                   setShowUploadGuideModal(true);
                 }}

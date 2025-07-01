@@ -11,7 +11,6 @@ import { UpgradeModal } from "./UpgradeModal";
 import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TOAST_CONFIG } from "@/lib/utils";
-import { useSession } from "next-auth/react";
 import { useModalStore } from "@/stores/useModalStore";
 
 interface TryOnFormProps {
@@ -168,10 +167,10 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
                     <img
                       src={URL.createObjectURL(personImage)}
                       alt="Person"
-                      className="w-full h-70 object-cover rounded-lg mx-auto"
+                      className="w-full h-100 object-cover rounded-lg mx-auto"
                     />
                   ) : (
-                    <div className="w-full h-70 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-full h-100 bg-gray-100 rounded-lg flex items-center justify-center">
                       <Upload className="h-12 w-12 text-gray-400" />
                     </div>
                   )}
@@ -234,10 +233,10 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
                     <img
                       src={URL.createObjectURL(garmentImage)}
                       alt="Garment"
-                      className="w-full h-70 object-cover rounded-lg mx-auto"
+                      className="w-full h-100 object-cover rounded-lg mx-auto"
                     />
                   ) : (
-                    <div className="w-full h-70 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <div className="w-full h-100 bg-gray-100 rounded-lg flex items-center justify-center">
                       <Upload className="h-12 w-12 text-gray-400" />
                     </div>
                   )}
@@ -288,6 +287,9 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               </>
             )}
           </Button>
+          <h3 className="text-gray-400 text-sm mt-2">
+            Processing can take up to 30 seconds.
+          </h3>
         </div>
       </div>
 
