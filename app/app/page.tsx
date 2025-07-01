@@ -11,7 +11,7 @@ export default function GalleryPage() {
       <div
         className={`${
           isCollapsed ? "w-10" : "w-50"
-        } flex-shrink-0 transition-all duration-300"`}
+        } flex-shrink-0 transition-all duration-300`}
       >
         <Sidebar />
       </div>
