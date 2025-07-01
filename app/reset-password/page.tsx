@@ -82,7 +82,7 @@ export default function ResetPasswordPage() {
 
             <Button
               type="submit"
-              className="w-full bg-primary cursor-pointer"
+              className="w-full bg-primary"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

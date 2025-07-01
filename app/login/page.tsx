@@ -71,7 +71,7 @@ export default function LoginPage() {
             <Button
               onClick={handleGoogleSignIn}
               variant="outline"
-              className="w-full flex  items-center justify-center gap-2 cursor-pointer"
+              className="w-full flex  items-center justify-center gap-2"
             >
               <Image
                 alt="google-logo"
@@ -87,7 +87,7 @@ export default function LoginPage() {
             <Button
               onClick={handleGoogleSignIn}
               variant="outline"
-              className="w-full flex  items-center justify-center gap-2 cursor-pointer"
+              className="w-full flex  items-center justify-center gap-2"
             >
               <Image
                 alt="facebook-logo"
@@ -141,7 +141,7 @@ export default function LoginPage() {
 
             <Button
               type="submit"
-              className="w-full bg-primary cursor-pointer"
+              className="w-full bg-primary"
               disabled={isSubmitting}
             >
               {isSubmitting ? (

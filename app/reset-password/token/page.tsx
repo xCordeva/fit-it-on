@@ -105,11 +105,7 @@ export default function NewPasswordPage() {
             <p className="text-sm text-red-500">{errors.password.message}</p>
           )}
 
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full cursor-pointer"
-          >
+          <Button type="submit" disabled={isSubmitting} className="w-full">
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

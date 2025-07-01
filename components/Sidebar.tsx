@@ -68,7 +68,7 @@ export default function Sidebar() {
         </div>
       )}
 
-      <Button className="bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70 cursor-pointer">
+      <Button className="bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70">
         <div className="flex items-center justify-center gap-1">
           <LuCrown className="h-5 w-5" />
           {!isCollapsed && (
@@ -86,7 +86,7 @@ export default function Sidebar() {
       {/* Links */}
       <Button
         variant="ghost"
-        className={`text-black font-bold cursor-pointer rounded-sm border-2 flex items-center ${
+        className={`text-black font-bold rounded-sm border-2 flex items-center ${
           isCollapsed ? "justify-center" : "justify-start"
         }
           ${
@@ -103,7 +103,7 @@ export default function Sidebar() {
       </Button>
       <Button
         variant="ghost"
-        className={`text-black font-bold cursor-pointer rounded-sm border-2 flex items-center ${
+        className={`text-black font-bold rounded-sm border-2 flex items-center ${
           isCollapsed ? "justify-center" : "justify-start"
         }
           ${
@@ -140,7 +140,7 @@ export default function Sidebar() {
                 <Button
                   variant="ghost"
                   size="lg"
-                  className="gap-2 cursor-pointer"
+                  className="gap-2"
                 >
                   {user.user_metadata.avatar_url ? (
                     <Image
@@ -180,7 +180,7 @@ export default function Sidebar() {
           />
         ) : (
           <Button
-            className="bg-primary text-white hover:bg-primary/80 hover:text-white cursor-pointer"
+            className="bg-primary text-white hover:bg-primary/80 hover:text-white"
             onClick={() => {
               setShowSignInModal(true);
             }}
@@ -208,7 +208,7 @@ export default function Sidebar() {
         <button onClick={toggleSidebarMenu} className="flex items-center">
           <TbLayoutSidebarRightExpand
             size={30}
-            className={`cursor-pointer transition-transform duration-300
+            className={`transition-transform duration-300
               ${isCollapsed ? "rotate-180" : ""}
             `}
           />

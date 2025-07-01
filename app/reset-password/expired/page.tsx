@@ -24,7 +24,7 @@ export default function ExpiredPasswordPage() {
         </CardHeader>
 
         <CardContent>
-          <Button type="submit" className="w-full bg-primary cursor-pointer">
+          <Button type="submit" className="w-full bg-primary">
             <Link href={"/reset-password"}>Request a new link</Link>
           </Button>
 

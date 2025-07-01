@@ -184,7 +184,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
                 <Button
                   variant="outline"
                   onClick={() => personInputRef.current?.click()}
-                  className="w-full cursor-pointer"
+                  className="w-full"
                 >
                   {personImage ? "Change Photo" : "Choose Photo"}
                 </Button>
@@ -248,7 +248,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
                 <Button
                   variant="outline"
                   onClick={() => garmentInputRef.current?.click()}
-                  className="w-full cursor-pointer"
+                  className="w-full"
                 >
                   {garmentImage ? "Change Garment" : "Choose Garment"}
                 </Button>
@@ -272,7 +272,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
           <Button
             onClick={handleSubmit}
             disabled={!personImage || !garmentImage || loading}
-            className="bg-primary hover:bg-primary/90 text-white px-8 py-3 text-lg cursor-pointer"
+            className="bg-primary hover:bg-primary/90 text-white px-8 py-3 text-lg"
             size="lg"
           >
             {loading ? (

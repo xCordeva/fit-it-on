@@ -90,7 +90,7 @@ export function Navbar() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="gap-2 cursor-pointer"
+                      className="gap-2"
                     >
                       {user.user_metadata.avatar_url ? (
                         <Image
