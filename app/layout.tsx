@@ -4,9 +4,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+
 import { AuthProvider } from "./Provider";
+import { getUserData } from "@/lib/getUserData";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -24,19 +24,15 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const { session, user, userData } = await getUserData();
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <AuthProvider initialSession={session} currentUser={user}>
+        <AuthProvider
+          initialSession={session}
+          currentUser={user}
+          userData={userData}
+        >
           {children}
           <Toaster />
         </AuthProvider>

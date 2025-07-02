@@ -5,10 +5,16 @@ import { supabase } from "@/lib/supabase";
 import { Session, User } from "@supabase/supabase-js";
 import { adjustTrialCountIfAnonymousTrialUsed } from "@/lib/utils";
 
+interface UserData {
+  trial_count: number;
+  plan: string;
+}
+
 // Define the shape of your AuthContext value
 interface AuthContextType {
   session: Session | null;
   user: User | null;
+  userData: UserData | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<any>; // Adjust return type if needed
   signInWithGoogle: () => Promise<any>;
@@ -33,10 +39,12 @@ export function AuthProvider({
   children,
   initialSession,
   currentUser,
+  userData,
 }: {
   children: React.ReactNode;
   initialSession: Session | null;
   currentUser: User | null;
+  userData: UserData | null;
 }) {
   const [session, setSessionState] = useState<Session | null>(initialSession);
   const [user, setUserState] = useState<User | null>(currentUser ?? null);
@@ -81,6 +89,7 @@ export function AuthProvider({
     session,
     user,
     loading,
+    userData,
 
     signIn: async (email: string, password: string) => {
       setLoading(true);
