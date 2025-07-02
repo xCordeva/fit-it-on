@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,12 +11,14 @@ import { Loader2 } from "lucide-react";
 import { Card, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import { TOAST_CONFIG } from "@/lib/utils";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../../Provider";
 
 export default function NewPasswordPage() {
   const [isReady, setIsReady] = useState(false);
   const router = useRouter();
-  const { setSession, updatePassword } = useAuth();
+  const { updatePassword } = useAuth();
+  const searchParams = useSearchParams();
+  const [code, setCode] = useState<string | null>(null);
 
   const {
     register,
@@ -25,32 +27,21 @@ export default function NewPasswordPage() {
   } = useForm<{ password: string }>();
 
   useEffect(() => {
-    // Extract tokens from URL hash
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const access_token = hashParams.get("access_token");
-    const refresh_token = hashParams.get("refresh_token");
-    const type = hashParams.get("type");
-
-    if (type !== "recovery" || !access_token || !refresh_token) {
+    const codeParam = searchParams.get("code");
+    if (!codeParam) {
       toast.error("Invalid or expired reset link.", { ...TOAST_CONFIG.error });
       router.replace("/reset-password/expired");
       return;
     }
-
-    // Set the session so user is authenticated
-    setSession(access_token, refresh_token).then(({ error }) => {
-      if (error) {
-        toast.error("Session error: " + error.message, {
-          ...TOAST_CONFIG.error,
-        });
-        router.replace("/login");
-      } else {
-        setIsReady(true);
-      }
-    });
-  }, [router]);
+    setCode(codeParam);
+    setIsReady(true);
+  }, [searchParams, router]);
 
   const onSubmit = async (data: { password: string }) => {
+    if (!code) {
+      toast.error("Invalid reset token.", { ...TOAST_CONFIG.error });
+      return;
+    }
     const { error } = await updatePassword(data.password);
 
     if (error) {

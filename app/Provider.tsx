@@ -15,7 +15,6 @@ interface AuthContextType {
   signUp: (email: string, password: string, name: string) => Promise<any>;
   signOut: () => Promise<any>;
   resetPassword: (email: string) => Promise<any>;
-  setSession: (access_token: string, refresh_token: string) => Promise<any>;
   updatePassword: (password: string) => Promise<any>;
 }
 
@@ -127,17 +126,6 @@ export function AuthProvider({
       setLoading(true);
       const res = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password/token`,
-      });
-
-      setLoading(false);
-      return res;
-    },
-
-    setSession: async (access_token: string, refresh_token: string) => {
-      setLoading(true);
-      const res = await supabase.auth.setSession({
-        access_token,
-        refresh_token,
       });
 
       setLoading(false);
