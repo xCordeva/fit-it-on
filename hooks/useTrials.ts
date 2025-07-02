@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "./useAuth";
+import { useAuth } from "../app/Provider";
 
 interface UserData {
   trial_count: number;

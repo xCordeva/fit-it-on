@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Menu, X, User, LogOut } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import {
   DropdownMenu,

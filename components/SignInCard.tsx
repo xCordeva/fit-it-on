@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../app/Provider";
 import { toast } from "sonner";
 import { TOAST_CONFIG } from "@/lib/utils";
 import Image from "next/image";

@@ -7,7 +7,7 @@ import { HiOutlineLogout } from "react-icons/hi";
 import { TbLayoutSidebarRightExpand } from "react-icons/tb";
 import { GiClothes } from "react-icons/gi";
 import { GrGallery } from "react-icons/gr";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import { FaRegUserCircle } from "react-icons/fa";
 import {
@@ -137,11 +137,7 @@ export default function Sidebar() {
                   <FaRegUserCircle size={30} />
                 )
               ) : (
-                <Button
-                  variant="ghost"
-                  size="lg"
-                  className="gap-2"
-                >
+                <Button variant="ghost" size="lg" className="gap-2">
                   {user.user_metadata.avatar_url ? (
                     <Image
                       src={user.user_metadata.avatar_url}
@@ -153,7 +149,7 @@ export default function Sidebar() {
                   ) : (
                     <FaRegUserCircle size={30} />
                   )}
-                  <span>{user.user_metadata.full_name}</span>
+                  <span>{user.user_metadata.name}</span>
                 </Button>
               )}
             </DropdownMenuTrigger>

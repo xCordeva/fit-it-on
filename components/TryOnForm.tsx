@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload, Sparkles, Loader2 } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import { SignInModal } from "./SignInModal";
 import { UpgradeModal } from "./UpgradeModal";
