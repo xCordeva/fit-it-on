@@ -7,11 +7,11 @@ import { Upload, Sparkles, Loader2 } from "lucide-react";
 import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import { SignInModal } from "./SignInModal";
-import { UpgradeModal } from "./UpgradeModal";
 import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TOAST_CONFIG } from "@/lib/utils";
 import { useModalStore } from "@/stores/useModalStore";
+import { uploadImageToSupabase } from "@/lib/utils";
 
 interface TryOnFormProps {
   onResult: (result: {
@@ -24,13 +24,10 @@ interface TryOnFormProps {
 export function TryOnForm({ onResult }: TryOnFormProps) {
   const [personImage, setPersonImage] = useState<File | null>(null);
   const [garmentImage, setGarmentImage] = useState<File | null>(null);
+
   const [loading, setLoading] = useState(false);
-  const {
-    showSignInModal,
-    setShowSignInModal,
-    showUpgradeModal,
-    setShowUpgradeModal,
-  } = useModalStore();
+  const { showSignInModal, setShowSignInModal, setShowUpgradeModal } =
+    useModalStore();
   const [personDragCounter, setPersonDragCounter] = useState(0);
   const [garmentDragCounter, setGarmentDragCounter] = useState(0);
 
@@ -93,7 +90,16 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       const formData = new FormData();
       formData.append("personImage", personImage);
       formData.append("garmentImage", garmentImage);
-
+      const modelImageUrl = await uploadImageToSupabase(
+        personImage,
+        "person",
+        user?.id ?? "anon"
+      );
+      const garmentImageUrl = await uploadImageToSupabase(
+        garmentImage,
+        "garment",
+        user?.id ?? "anon"
+      );
       const response = {
         ok: true,
         status: 200,
@@ -294,11 +300,6 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       </div>
 
       <SignInModal open={showSignInModal} onOpenChange={setShowSignInModal} />
-
-      <UpgradeModal
-        open={showUpgradeModal}
-        onOpenChange={setShowUpgradeModal}
-      />
     </>
   );
 }
