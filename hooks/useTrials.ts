@@ -61,8 +61,7 @@ export function useTrials() {
       if (userData?.plan === "pro") return Infinity;
       return userData?.trial_count ?? 0;
     } else {
-      if (typeof window === "undefined") return true;
-      return localStorage.getItem("hasTriedFree") ? 0 : 1;
+      return 1;
     }
   };
 

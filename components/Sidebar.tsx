@@ -21,6 +21,7 @@ import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { SignInModal } from "./SignInModal";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
   const { isCollapsed, toggleSidebarMenu } = useSidebarStore();
@@ -34,6 +35,17 @@ export default function Sidebar() {
   const handleSignOut = async () => {
     await signOut();
   };
+
+  const [anonTrials, setAnonTrials] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!user) {
+      const hasTried = localStorage.getItem("hasTriedFree");
+      setAnonTrials(hasTried ? 0 : 1);
+    } else {
+      setAnonTrials(undefined);
+    }
+  }, [user]);
 
   return (
     <div
@@ -59,15 +71,23 @@ export default function Sidebar() {
         )}
       </Link>
 
-      {remainingTrials !== null && (
-        <div
-          className={`text-sm text-gray-600 flex items-center justify-center transition-all m-0 p-0 duration-300 ${
-            isCollapsed ? "h-0 opacity-0" : "h-8 opacity-100"
-          }`}
-        >
-          {remainingTrials} <span>&nbsp;tries left</span>
-        </div>
-      )}
+      <div
+        className={`text-sm text-gray-600 flex items-center justify-center transition-all m-0 p-0 duration-300 ${
+          isCollapsed ? "h-0 opacity-0" : "h-8 opacity-100"
+        }`}
+      >
+        {user ? (
+          // Show normal user-based trial count
+          <div>{remainingTrials} tries left</div>
+        ) : anonTrials === undefined ? (
+          // While loading
+
+          <span className="loader"></span>
+        ) : (
+          // Once loaded
+          <div className="text-sm text-gray-600">{anonTrials} tries left</div>
+        )}
+      </div>
 
       <Button
         className="bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70"
@@ -138,7 +158,7 @@ export default function Sidebar() {
                     alt="user-image"
                   />
                 ) : (
-                  <FaRegUserCircle size={30} />
+                  <FaRegUserCircle size={30} className="cursor-pointer" />
                 )
               ) : (
                 <Button variant="ghost" size="lg" className="gap-2">
@@ -151,7 +171,7 @@ export default function Sidebar() {
                       alt="user-image"
                     />
                   ) : (
-                    <FaRegUserCircle size={30} />
+                    <FaRegUserCircle size={30} className="cursor-pointer" />
                   )}
                   <span>{user.user_metadata.name}</span>
                 </Button>
@@ -208,7 +228,7 @@ export default function Sidebar() {
         <button onClick={toggleSidebarMenu} className="flex items-center">
           <TbLayoutSidebarRightExpand
             size={30}
-            className={`transition-transform duration-300
+            className={`transition-transform duration-300 cursor-pointer
               ${isCollapsed ? "rotate-180" : ""}
             `}
           />
