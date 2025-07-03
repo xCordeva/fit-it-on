@@ -2,13 +2,19 @@
 
 import Canvas from "@/components/Canvas";
 import Sidebar from "@/components/Sidebar";
+import { UpgradeModal } from "@/components/UpgradeModal";
 import UploadGuideModal from "@/components/UploadGuideModal";
 import { useModalStore } from "@/stores/useModalStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 
 export default function GalleryPage() {
   const { isCollapsed } = useSidebarStore();
-  const { showUploadGuideModal, setShowUploadGuideModal } = useModalStore();
+  const {
+    showUploadGuideModal,
+    setShowUploadGuideModal,
+    showUpgradeModal,
+    setShowUpgradeModal,
+  } = useModalStore();
   return (
     <div className="flex h-screen w-full bg-[#f2f2f2]">
       <div
@@ -23,6 +29,10 @@ export default function GalleryPage() {
         <UploadGuideModal
           open={showUploadGuideModal}
           onOpenChange={setShowUploadGuideModal}
+        />
+        <UpgradeModal
+          open={showUpgradeModal}
+          onOpenChange={setShowUpgradeModal}
         />
       </div>
     </div>
