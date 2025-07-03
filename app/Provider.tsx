@@ -22,6 +22,7 @@ interface AuthContextType {
   signOut: () => Promise<any>;
   resetPassword: (email: string) => Promise<any>;
   updatePassword: (password: string) => Promise<any>;
+  setUserData: (data: UserData | null) => void;
 }
 
 // Create the context with a default null value (it will be provided by the Provider)
@@ -49,6 +50,9 @@ export function AuthProvider({
   const [session, setSessionState] = useState<Session | null>(initialSession);
   const [user, setUserState] = useState<User | null>(currentUser ?? null);
   const [loading, setLoading] = useState(false); // Set to false initially as session is known
+  const [userDataState, setUserDataState] = useState<UserData | null>(
+    userData ?? null
+  );
 
   useEffect(() => {
     // Only set loading to true if we don't have an initial session
@@ -89,7 +93,8 @@ export function AuthProvider({
     session,
     user,
     loading,
-    userData,
+    userData: userDataState,
+    setUserData: setUserDataState,
 
     signIn: async (email: string, password: string) => {
       setLoading(true);

@@ -4,14 +4,8 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "../app/Provider";
 
-interface UserData {
-  trial_count: number;
-  plan: string;
-}
-
 export function useTrials() {
-  const { user, userData: initialUserData } = useAuth();
-  const [userData, setUserData] = useState<UserData | null>(initialUserData);
+  const { user, userData, setUserData } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const fetchUserData = async () => {
