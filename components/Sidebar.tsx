@@ -24,7 +24,8 @@ import { SignInModal } from "./SignInModal";
 
 export default function Sidebar() {
   const { isCollapsed, toggleSidebarMenu } = useSidebarStore();
-  const { setShowSignInModal, showSignInModal } = useModalStore();
+  const { setShowSignInModal, showSignInModal, setShowUpgradeModal } =
+    useModalStore();
 
   const { user, signOut } = useAuth();
   const { remainingTrials } = useTrials();
@@ -68,7 +69,10 @@ export default function Sidebar() {
         </div>
       )}
 
-      <Button className="bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70">
+      <Button
+        className="bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70"
+        onClick={() => setShowUpgradeModal(true)}
+      >
         <div className="flex items-center justify-center gap-1">
           <LuCrown className="h-5 w-5" />
           {!isCollapsed && (
@@ -118,7 +122,7 @@ export default function Sidebar() {
           {!isCollapsed && <span>Gallery</span>}
         </Link>
       </Button>
-      
+
       {/* Bottom Section */}
       <div className="absolute w-46 bottom-0 flex flex-col justify-center py-2 space-y-4">
         {user ? (

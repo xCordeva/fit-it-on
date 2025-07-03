@@ -1,122 +1,136 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
-import { Check, Crown, Loader2 } from 'lucide-react'
-import { PLANS } from '@/lib/payments'
-import { toast } from 'sonner'
+} from "@/components/ui/dialog";
+import { Check, Crown, Loader2, Star } from "lucide-react";
+import { PLANS } from "@/lib/stripe";
+import { toast } from "sonner";
 
 interface UpgradeModalProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [selectedPlan, setSelectedPlan] =
+    useState<keyof typeof PLANS>("starter");
 
   const handleUpgrade = async () => {
-    setLoading(true)
-    
+    setLoading(true);
+
     try {
-      // TODO: Replace with your payment provider's checkout flow
-      toast.info('Payment integration coming soon! We\'ll notify you when it\'s ready.')
-      onOpenChange(false)
-      
-      // Placeholder for payment provider integration
-      // Example implementations:
-      
-      // For Stripe:
-      // const response = await fetch('/api/create-checkout-session', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ priceId: PLANS.pro.priceId }),
-      // })
-      // const { url } = await response.json()
-      // window.location.href = url
-      
-      // For other providers, implement accordingly
-      
+      toast.info(
+        "Payment integration coming soon! We'll notify you when it's ready."
+      );
+      onOpenChange(false);
+
+      // Example Stripe checkout redirect
+      // const response = await fetch("/api/create-checkout-session", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ priceId: PLANS[selectedPlan].priceId }),
+      // });
+      // const { url } = await response.json();
+      // window.location.href = url;
     } catch (error) {
-      toast.error('Failed to start checkout. Please try again.')
+      toast.error("Failed to start checkout. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-3xl">
+        <DialogHeader className="flex items-center justify-center">
           <DialogTitle className="flex items-center gap-2">
             <Crown className="h-5 w-5 text-yellow-500" />
-            Upgrade to Pro
+            Upgrade Your Plan
           </DialogTitle>
           <DialogDescription>
-            You've used all your free tries! Upgrade to Pro for unlimited virtual try-ons.
+            Choose the plan that fits your needs and continue exploring your
+            style.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-6">
-          {/* Pricing */}
-          <div className="text-center">
-            <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-6 rounded-lg">
-              <div className="text-3xl font-bold">${PLANS.pro.price}</div>
-              <div className="text-sm opacity-90">per month</div>
-            </div>
-          </div>
-
-          {/* Features */}
-          <div className="space-y-3">
-            <h4 className="font-semibold">What you get:</h4>
-            {PLANS.pro.features.map((feature, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <Check className="h-4 w-4 text-green-500" />
-                <span className="text-sm">{feature}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {Object.entries(PLANS).map(([key, plan]) => (
+            <div
+              key={key}
+              onClick={() => setSelectedPlan(key as keyof typeof PLANS)}
+              className={`border rounded-lg cursor-pointer p-4 transition hover:border-primary ${
+                selectedPlan === key
+                  ? "ring-2 ring-primary border-primary"
+                  : "border-gray-300"
+              }`}
+            >
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="text-lg font-semibold">{plan.name}</h3>
+                {key === "pro" && (
+                  <span className="inline-flex items-center gap-1 text-xs bg-[#facc15] px-2 py-0.5 rounded-full">
+                    <Star className="h-3 w-3" />
+                    Best Value
+                  </span>
+                )}
               </div>
-            ))}
-          </div>
+              <div className="text-3xl font-bold mb-1">${plan.price}</div>
+              <div className="text-sm text-gray-600 mb-4">per month</div>
+              <div className="text-sm mb-4">
+                Includes{" "}
+                <span className="font-bold">{plan.credits} images</span> monthly
+              </div>
+              <div className="space-y-2">
+                {plan.features.map((feature, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-green-500" />
+                    <span className="text-sm">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
 
-          {/* Actions */}
-          <div className="space-y-3">
-            <Button 
-              onClick={handleUpgrade} 
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Setting up...
-                </>
-              ) : (
-                <>
-                  <Crown className="mr-2 h-4 w-4" />
-                  Upgrade to Pro
-                </>
-              )}
-            </Button>
-            
-            <Button 
-              variant="ghost" 
-              onClick={() => onOpenChange(false)}
-              className="w-full"
-            >
-              Maybe Later
-            </Button>
-          </div>
+        <div className="space-y-3 mt-6">
+          <Button
+            onClick={handleUpgrade}
+            className="w-full bg-primary"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Preparing checkout...
+              </>
+            ) : (
+              <>
+                <Crown className="mr-2 h-4 w-4" />
+                Upgrade to {PLANS[selectedPlan].name}
+              </>
+            )}
+          </Button>
 
-          <div className="text-center text-xs text-gray-600">
-            <p>Payment integration coming soon!</p>
-          </div>
+          <Button
+            variant="ghost"
+            onClick={() => onOpenChange(false)}
+            className="w-full "
+          >
+            Maybe Later
+          </Button>
+        </div>
+
+        <div className="text-center text-xs text-gray-500">
+          Payments securely handled via Stripe.
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

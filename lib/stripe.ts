@@ -1,24 +1,39 @@
-import Stripe from 'stripe'
+// import Stripe from "stripe";
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set')
-}
+// if (!process.env.STRIPE_SECRET_KEY) {
+//   throw new Error("STRIPE_SECRET_KEY is not set");
+// }
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-12-18.acacia',
-})
+// export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+//   apiVersion: "2024-12-18.acacia",
+// });
 
 export const PLANS = {
-  pro: {
-    name: 'Pro',
-    price: 29,
-    priceId: 'price_pro_monthly', // You'll get this from Stripe dashboard
+  starter: {
+    name: "Starter",
+    price: "8.99",
+    credits: 100,
+    priceId: "starter-price-id", // replace with your Stripe price ID
     features: [
-      'Unlimited try-ons',
-      'High-quality results',
-      'Save & organize fits',
-      'Priority processing',
-      'Export options'
-    ]
-  }
-}
+      "100 try-on images per month",
+      "Access to standard models",
+      "Email support",
+    ],
+    description:
+      "Perfect for casual users who want to explore virtual try-ons.",
+    popular: true,
+  },
+  pro: {
+    name: "Pro",
+    price: "18.99",
+    credits: 250,
+    priceId: "pro-price-id", // replace with your Stripe price ID
+    features: [
+      "250 try-on images per month",
+      "Priority processing",
+      "Priority support",
+    ],
+    description: "Ideal for frequent users and fashion enthusiasts.",
+    popular: false,
+  },
+};
