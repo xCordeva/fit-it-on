@@ -9,6 +9,20 @@
 // });
 
 export const PLANS = {
+  basic: {
+    name: "Basic",
+    price: "4.99",
+    credits: 50,
+    priceId: "basic-price-id", // replace with your Stripe price ID
+    features: [
+      "50 try-on images per month",
+      "Access to standard models",
+      "Email support",
+    ],
+    description:
+      "Perfect for casual users who want to explore virtual try-ons.",
+    popular: false,
+  },
   starter: {
     name: "Starter",
     price: "8.99",
@@ -19,8 +33,7 @@ export const PLANS = {
       "Access to standard models",
       "Email support",
     ],
-    description:
-      "Perfect for casual users who want to explore virtual try-ons.",
+    description: "Perfect for casual users exploring more styles.",
     popular: true,
   },
   pro: {

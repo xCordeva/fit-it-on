@@ -9,9 +9,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Check, Crown, Loader2, Star } from "lucide-react";
 import { PLANS } from "@/lib/stripe";
 import { toast } from "sonner";
+import { LuLoaderCircle } from "react-icons/lu";
+import { LuCrown } from "react-icons/lu";
+import { FaCheck } from "react-icons/fa";
+import { FaRegStar } from "react-icons/fa";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -52,7 +55,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader className="flex items-center justify-center">
           <DialogTitle className="flex items-center gap-2">
-            <Crown className="h-5 w-5 text-yellow-500" />
+            <LuCrown className="h-5 w-5 text-yellow-500" />
             Upgrade Your Plan
           </DialogTitle>
           <DialogDescription>
@@ -61,7 +64,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {Object.entries(PLANS).map(([key, plan]) => (
             <div
               key={key}
@@ -76,7 +79,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
                 <h3 className="text-lg font-semibold">{plan.name}</h3>
                 {key === "pro" && (
                   <span className="inline-flex items-center gap-1 text-xs bg-[#facc15] px-2 py-0.5 rounded-full">
-                    <Star className="h-3 w-3" />
+                    <FaRegStar className="h-3 w-3" />
                     Best Value
                   </span>
                 )}
@@ -90,7 +93,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
               <div className="space-y-2">
                 {plan.features.map((feature, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
+                    <FaCheck className="h-4 w-4 text-green-500" />
                     <span className="text-sm">{feature}</span>
                   </div>
                 ))}
@@ -107,12 +110,12 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <LuLoaderCircle className="mr-2 h-4 w-4 animate-spin" />
                 Preparing checkout...
               </>
             ) : (
               <>
-                <Crown className="mr-2 h-4 w-4" />
+                <LuCrown className="mr-2 h-4 w-4" />
                 Upgrade to {PLANS[selectedPlan].name}
               </>
             )}
