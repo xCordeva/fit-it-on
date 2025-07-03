@@ -3,8 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PLANS } from "@/lib/stripe";
-import { Check, Crown, Star } from "lucide-react";
 import { toast } from "sonner";
+import { PiShootingStarThin } from "react-icons/pi";
+import { FaRegStar } from "react-icons/fa";
+import { LuCrown } from "react-icons/lu";
+import { FaCheck } from "react-icons/fa";
 
 export function PricingTable() {
   const handleGetStarted = async (planName: string) => {
@@ -19,7 +22,7 @@ export function PricingTable() {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto py-12">
+    <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto py-12">
       {Object.entries(PLANS).map(([key, plan]) => (
         <Card
           key={plan.name}
@@ -39,10 +42,12 @@ export function PricingTable() {
 
           <CardHeader className="text-center">
             <CardTitle className="flex items-center justify-center gap-2">
-              {plan.popular ? (
-                <Star className="h-5 w-5 text-purple-600" />
+              {plan.name === "Starter" ? (
+                <PiShootingStarThin className="h-5 w-5 text-purple-600" />
+              ) : plan.name === "Pro" ? (
+                <LuCrown className="h-5 w-5 text-yellow-500" />
               ) : (
-                <Crown className="h-5 w-5 text-yellow-500" />
+                <FaRegStar className="h-5 w-5 text-purple-600" />
               )}
               {plan.name}
             </CardTitle>
@@ -57,7 +62,7 @@ export function PricingTable() {
             <ul className="space-y-3">
               {plan.features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2">
-                  <Check className="h-4 w-4 text-green-500" />
+                  <FaCheck className="h-4 w-4 text-green-500" />
                   <span className="text-sm">{feature}</span>
                 </li>
               ))}
