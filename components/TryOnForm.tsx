@@ -11,14 +11,10 @@ import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TOAST_CONFIG } from "@/lib/utils";
 import { useModalStore } from "@/stores/useModalStore";
-import { uploadImageToSupabase } from "@/lib/utils";
+import { uploadImageToSupabase } from "@/lib/tryOnHelpers";
 
 interface TryOnFormProps {
-  onResult: (result: {
-    inputUrl: string;
-    garmentUrl: string;
-    outputUrl: string;
-  }) => void;
+  onResult: (result: { outputUrl: string }) => void;
 }
 
 export function TryOnForm({ onResult }: TryOnFormProps) {
