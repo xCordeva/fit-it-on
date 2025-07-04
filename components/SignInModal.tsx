@@ -20,7 +20,7 @@ interface SignInModalProps {
 export function SignInModal({ open, onOpenChange }: SignInModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col rounded-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-center gap-2">
             <Image

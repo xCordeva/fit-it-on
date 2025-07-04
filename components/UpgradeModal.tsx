@@ -52,7 +52,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col rounded-lg">
         <DialogHeader className="flex items-center justify-center">
           <DialogTitle className="flex items-center gap-2">
             <LuCrown className="h-5 w-5 text-yellow-500" />

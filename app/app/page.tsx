@@ -17,26 +17,28 @@ export default function AppPage() {
     setShowUpgradeModal,
   } = useModalStore();
   return (
-    <div className="flex h-screen w-full bg-[#f2f2f2]">
-      <div
-        className={`${
-          isCollapsed ? "w-10" : "w-50"
-        } flex-shrink-0 transition-all duration-300 hidden md:flex`}
-      >
-        <Sidebar />
+    <>
+      <div className="flex h-screen w-full bg-[#f2f2f2]">
+        <div
+          className={`${
+            isCollapsed ? "w-10" : "w-50"
+          } flex-shrink-0 transition-all duration-300 hidden md:flex`}
+        >
+          <Sidebar />
+        </div>
+        <BottomNavbar />
+        <div className="flex-1 p-2 flex overflow-auto">
+          <Canvas />
+        </div>
       </div>
-      <BottomNavbar />
-      <div className="flex-1 p-2 flex overflow-auto">
-        <Canvas />
-        <UploadGuideModal
-          open={showUploadGuideModal}
-          onOpenChange={setShowUploadGuideModal}
-        />
-        <UpgradeModal
-          open={showUpgradeModal}
-          onOpenChange={setShowUpgradeModal}
-        />
-      </div>
-    </div>
+      <UploadGuideModal
+        open={showUploadGuideModal}
+        onOpenChange={setShowUploadGuideModal}
+      />
+      <UpgradeModal
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+      />
+    </>
   );
 }

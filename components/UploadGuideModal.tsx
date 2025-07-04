@@ -16,7 +16,7 @@ export default function UploadGuideModal({
 }: UploadGuideModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col rounded-lg">
         <DialogTitle className="hidden"></DialogTitle>
         <div className="flex items-center justify-center mx-auto flex-col pb-6 mt-6 max-w-120">
           <div>
