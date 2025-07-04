@@ -8,15 +8,22 @@ export async function getUserData() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  const { data: userData } = await supabase
-    .from("users")
-    .select("*")
-    .eq("id", session?.user.id)
-    .single();
+  const user = session?.user ?? null;
+
+  let userData = null;
+
+  if (user) {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("id", user.id)
+      .single();
+
+    if (!error) {
+      userData = data;
+    }
+  }
 
   return {
     session,
