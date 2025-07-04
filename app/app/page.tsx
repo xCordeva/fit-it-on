@@ -1,5 +1,6 @@
 "use client";
 
+import BottomNavbar from "@/components/BottomNavbar";
 import Canvas from "@/components/Canvas";
 import Sidebar from "@/components/Sidebar";
 import { UpgradeModal } from "@/components/UpgradeModal";
@@ -7,7 +8,7 @@ import UploadGuideModal from "@/components/UploadGuideModal";
 import { useModalStore } from "@/stores/useModalStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 
-export default function GalleryPage() {
+export default function AppPage() {
   const { isCollapsed } = useSidebarStore();
   const {
     showUploadGuideModal,
@@ -20,10 +21,11 @@ export default function GalleryPage() {
       <div
         className={`${
           isCollapsed ? "w-10" : "w-50"
-        } flex-shrink-0 transition-all duration-300`}
+        } flex-shrink-0 transition-all duration-300 hidden md:flex`}
       >
         <Sidebar />
       </div>
+      <BottomNavbar />
       <div className="flex-1 p-2 flex overflow-auto">
         <Canvas />
         <UploadGuideModal
