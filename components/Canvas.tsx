@@ -5,16 +5,11 @@ import { TryOnForm } from "@/components/TryOnForm";
 import { TryOnResult } from "@/components/TryOnResult";
 import { useModalStore } from "@/stores/useModalStore";
 
-interface TryOnResultData {
-  inputUrl: string;
-  garmentUrl: string;
-  outputUrl: string;
-}
 
 export default function Canvas() {
-  const [result, setResult] = useState<TryOnResultData | null>(null);
+  const [result, setResult] = useState<string | null>(null);
 
-  const handleResult = (newResult: TryOnResultData) => {
+  const handleResult = (newResult: string) => {
     setResult(newResult);
   };
 

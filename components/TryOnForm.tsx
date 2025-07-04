@@ -11,10 +11,13 @@ import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TOAST_CONFIG } from "@/lib/utils";
 import { useModalStore } from "@/stores/useModalStore";
-import { uploadImageToSupabase } from "@/lib/tryOnHelpers";
+import {
+  uploadImageFromUrlToSupabase,
+  uploadImageToSupabase,
+} from "@/lib/tryOnHelpers";
 
 interface TryOnFormProps {
-  onResult: (result: { outputUrl: string }) => void;
+  onResult: (result: string) => void;
 }
 
 export function TryOnForm({ onResult }: TryOnFormProps) {
@@ -110,10 +113,16 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         throw new Error("Failed to process try-on");
       }
 
-      const result = await response.json();
+      const apiResult = await response.json();
+
+      // Upload the resulting image to Supabase
+      const result = await uploadImageFromUrlToSupabase(
+        apiResult.outputUrl,
+        "results",
+        user?.id ?? "anon"
+      );
 
       // Decrement trial for authenticated users
-
       if (user) {
         await decrementTrial();
       } else {

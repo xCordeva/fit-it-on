@@ -19,9 +19,7 @@ import { useCanvasImageDrawer } from "@/hooks/useCanvasImageDrawer";
 import { useDownloadTryOnResult } from "@/hooks/useDownloadResult";
 
 interface TryOnResultProps {
-  result: {
-    outputUrl: string;
-  };
+  result: string;
   onReset: () => void;
 }
 
@@ -35,16 +33,16 @@ export function TryOnResult({ result, onReset }: TryOnResultProps) {
   const handleDownload = useDownloadTryOnResult(
     isProUser,
     canvasRef,
-    result.outputUrl,
+    result,
     setLoading
   );
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (canvas && result.outputUrl) {
-      drawImage(canvas, result.outputUrl);
+    if (canvas && result) {
+      drawImage(canvas, result);
     }
-  }, [result.outputUrl, drawImage]);
+  }, [result, drawImage]);
 
   return (
     <div className="space-y-6">
@@ -53,7 +51,7 @@ export function TryOnResult({ result, onReset }: TryOnResultProps) {
         <div className="relative border-2 border-black rounded-lg overflow-hidden">
           <canvas
             ref={canvasRef}
-            className="w-full h-64 md:h-[100%] md:max-h-[500px] object-contain bg-gray-200"
+            className="w-full h-64 md:h-[100%] md:max-h-[500px] object-contain bg-gray-100"
             onContextMenu={(e) => {
               // Disable right-click on the canvas itself
               e.preventDefault();
