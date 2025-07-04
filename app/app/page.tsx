@@ -3,6 +3,7 @@
 import BottomNavbar from "@/components/BottomNavbar";
 import Canvas from "@/components/Canvas";
 import Sidebar from "@/components/Sidebar";
+import { SignInModal } from "@/components/SignInModal";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import UploadGuideModal from "@/components/UploadGuideModal";
 import { useModalStore } from "@/stores/useModalStore";
@@ -15,6 +16,8 @@ export default function AppPage() {
     setShowUploadGuideModal,
     showUpgradeModal,
     setShowUpgradeModal,
+    showSignInModal,
+    setShowSignInModal,
   } = useModalStore();
   return (
     <>
@@ -39,6 +42,7 @@ export default function AppPage() {
         open={showUpgradeModal}
         onOpenChange={setShowUpgradeModal}
       />
+      <SignInModal open={showSignInModal} onOpenChange={setShowSignInModal} />
     </>
   );
 }

@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Upload, Sparkles, Loader2 } from "lucide-react";
 import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
-import { SignInModal } from "./SignInModal";
 import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TOAST_CONFIG } from "@/lib/utils";
@@ -25,8 +24,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
   const [garmentImage, setGarmentImage] = useState<File | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const { showSignInModal, setShowSignInModal, setShowUpgradeModal } =
-    useModalStore();
+  const { setShowSignInModal, setShowUpgradeModal } = useModalStore();
   const [personDragCounter, setPersonDragCounter] = useState(0);
   const [garmentDragCounter, setGarmentDragCounter] = useState(0);
 
@@ -303,8 +301,6 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
           </h3>
         </div>
       </div>
-
-      <SignInModal open={showSignInModal} onOpenChange={setShowSignInModal} />
     </>
   );
 }
