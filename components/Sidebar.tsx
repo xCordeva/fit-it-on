@@ -49,102 +49,100 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col justify-start py-2 px-2 space-y-4 relative transition-all duration-300
+      className={`flex flex-col justify-between min-h-screen py-2 px-2 transition-all duration-300  
         ${isCollapsed ? "w-10" : "w-50"}
       `}
     >
-      <Link href="/" className="flex items-center justify-center mb-4 h-10">
-        {!isCollapsed ? (
-          <Image
-            height={180}
-            width={180}
-            src="/logo.png"
-            alt="fit-it-on-logo"
-          />
-        ) : (
-          <Image
-            height={40}
-            width={40}
-            src="/f-logo.png"
-            alt="fit-it-on-f-logo"
-          />
-        )}
-      </Link>
+      <div className="flex flex-col justify-start space-y-4 h-[50%]">
+        <Link href="/" className="flex items-center justify-center mb-4 h-10">
+          {!isCollapsed ? (
+            <Image
+              height={180}
+              width={180}
+              className="h-auto w-180"
+              src="/logo.png"
+              alt="fit-it-on-logo"
+            />
+          ) : (
+            <Image
+              height={40}
+              width={40}
+              src="/f-logo.png"
+              alt="fit-it-on-f-logo"
+            />
+          )}
+        </Link>
 
-      <div
-        className={`text-sm text-gray-600 flex items-center justify-center transition-all m-0 p-0 duration-300 ${
-          isCollapsed ? "h-0 opacity-0" : "h-8 opacity-100"
-        }`}
-      >
-        {user ? (
-          // Show normal user-based trial count
-          <div>{remainingTrials} tries left</div>
-        ) : anonTrials === undefined ? (
-          // While loading
+        <div
+          className={`text-sm text-gray-600 flex items-center justify-center transition-all m-0 p-0 duration-300 ${
+            isCollapsed ? "h-0 opacity-0" : "h-8 opacity-100"
+          }`}
+        >
+          {user ? (
+            // Show normal user-based trial count
+            <div>{remainingTrials} tries left</div>
+          ) : anonTrials === undefined ? (
+            // While loading
 
-          <span className="loader"></span>
-        ) : (
-          // Once loaded
-          <div className="text-sm text-gray-600">{anonTrials} tries left</div>
-        )}
-      </div>
-
-      <Button
-        className="bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70"
-        onClick={() => setShowUpgradeModal(true)}
-      >
-        <div className="flex items-center justify-center gap-1">
-          <LuCrown className="h-5 w-5" />
-          {!isCollapsed && (
-            <span
-              className={`${
-                isCollapsed ? "w-0 opacity-0" : "w-full opacity-100"
-              }`}
-            >
-              Unlock Pro Features
-            </span>
+            <span className="loader"></span>
+          ) : (
+            // Once loaded
+            <div className="text-sm text-gray-600">{anonTrials} tries left</div>
           )}
         </div>
-      </Button>
 
-      {/* Links */}
-      <Button
-        variant="ghost"
-        className={`text-black font-bold rounded-sm border-2 flex items-center ${
-          isCollapsed ? "justify-center" : "justify-start"
-        }
+        <Button
+          className={`bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70 overflow-hidden gap-1 ${
+            isCollapsed ? "justify-center" : "justify-start"
+          }`}
+          onClick={() => setShowUpgradeModal(true)}
+        >
+          <LuCrown className="h-5 w-5 flex-shrink-0" />
+          {!isCollapsed && <span>Unlock Pro Features</span>}
+        </Button>
+
+        {/* Links */}
+        <Button
+          variant="ghost"
+          className={`text-black font-bold rounded-sm border-2 flex items-center overflow-hidden ${
+            isCollapsed ? "justify-center" : "justify-start"
+          }
           ${
             pathname === "/app"
               ? "bg-gray-200 border-gray-500 shadow-lg"
               : "hover:bg-gray-200 border-transparent"
           }
           `}
-      >
-        <Link href={"/app"} className="flex items-center  gap-1">
-          <GiClothes className="h-5 w-5" />
-          {!isCollapsed && <span>Studio</span>}
-        </Link>
-      </Button>
-      <Button
-        variant="ghost"
-        className={`text-black font-bold rounded-sm border-2 flex items-center ${
-          isCollapsed ? "justify-center" : "justify-start"
-        }
+        >
+          <Link href={"/app"} className="flex items-center  gap-1">
+            <GiClothes className="h-5 w-5" />
+            {!isCollapsed && <span>Studio</span>}
+          </Link>
+        </Button>
+        <Button
+          variant="ghost"
+          className={`text-black font-bold rounded-sm border-2 flex items-center overflow-hidden ${
+            isCollapsed ? "justify-center" : "justify-start"
+          }
           ${
             pathname === "/gallery"
               ? "bg-gray-200 border-gray-500 shadow-lg"
               : "hover:bg-gray-200 border-transparent"
           }
           `}
-      >
-        <Link href={"/gallery"} className="flex items-center  gap-1">
-          <GrGallery className="h-5 w-5" />
-          {!isCollapsed && <span>Gallery</span>}
-        </Link>
-      </Button>
+        >
+          <Link href={"/gallery"} className="flex items-center  gap-1">
+            <GrGallery className="h-5 w-5" />
+            {!isCollapsed && <span>Gallery</span>}
+          </Link>
+        </Button>
+      </div>
 
       {/* Bottom Section */}
-      <div className="absolute w-46 bottom-0 flex flex-col justify-center py-2 space-y-4">
+      <div
+        className={`h-[50%] flex flex-col justify-end py-2 space-y-4 transition-all duration-300  
+        ${isCollapsed ? "w-10" : "w-46"}`}
+      >
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -224,15 +222,13 @@ export default function Sidebar() {
             </>
           )}
         </div>
-
-        <button onClick={toggleSidebarMenu} className="flex items-center">
-          <TbLayoutSidebarRightExpand
-            size={30}
-            className={`transition-transform duration-300 cursor-pointer
+        <TbLayoutSidebarRightExpand
+          size={30}
+          onClick={toggleSidebarMenu}
+          className={`transition-transform duration-300 cursor-pointer 
               ${isCollapsed ? "rotate-180" : ""}
             `}
-          />
-        </button>
+        />
       </div>
       <SignInModal open={showSignInModal} onOpenChange={setShowSignInModal} />
     </div>
