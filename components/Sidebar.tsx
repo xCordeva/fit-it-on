@@ -21,13 +21,14 @@ import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { SignInModal } from "./SignInModal";
-import { useEffect, useState } from "react";
+import { useTrialsStore } from "@/stores/useTrialsStore";
 
 export default function Sidebar() {
   const { isCollapsed, toggleSidebarMenu } = useSidebarStore();
   const { setShowSignInModal, showSignInModal, setShowUpgradeModal } =
     useModalStore();
 
+  const { anonTrials } = useTrialsStore();
   const { user, signOut } = useAuth();
   const { remainingTrials } = useTrials();
   const pathname = usePathname();
@@ -35,18 +36,6 @@ export default function Sidebar() {
   const handleSignOut = async () => {
     await signOut();
   };
-
-  const [anonTrials, setAnonTrials] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (!user) {
-      const hasTried = localStorage.getItem("hasTriedFree");
-      setAnonTrials(hasTried ? 0 : 1);
-    } else {
-      setAnonTrials(undefined);
-    }
-  }, [user]);
-
   return (
     <div
       className={`flex flex-col justify-between min-h-screen py-2 px-2 transition-all duration-300  

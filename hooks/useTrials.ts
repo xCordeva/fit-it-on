@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "../app/Provider";
+import { useTrialsStore } from "@/stores/useTrialsStore";
 
 export function useTrials() {
   const { user, userData, setUserData } = useAuth();
   const [loading, setLoading] = useState(false);
+  const { anonTrials, setAnonTrials, _hasHydrated } = useTrialsStore();
+
+  useEffect(() => {
+    if (user) {
+      if (anonTrials !== undefined) {
+        setAnonTrials(undefined);
+      }
+    }
+  }, [user, anonTrials, setAnonTrials]);
 
   const fetchUserData = async () => {
     if (!user?.id) return;
@@ -51,8 +61,7 @@ export function useTrials() {
       // Free plan must have trials left
       return (userData?.trial_count ?? 0) > 0;
     } else {
-      if (typeof window === "undefined") return true;
-      return !localStorage.getItem("hasTriedFree");
+      return _hasHydrated ? anonTrials && anonTrials > 0 : true;
     }
   };
 
@@ -61,12 +70,12 @@ export function useTrials() {
       if (userData?.plan === "pro") return Infinity;
       return userData?.trial_count ?? 0;
     } else {
-      return 1;
+      return _hasHydrated ? anonTrials : undefined;
     }
   };
 
   const markAnonymousTrialUsed = () => {
-    localStorage.setItem("hasTriedFree", "true");
+    setAnonTrials(0);
   };
 
   return {
