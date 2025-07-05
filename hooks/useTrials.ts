@@ -11,12 +11,18 @@ export function useTrials() {
   const { anonTrials, setAnonTrials, _hasHydrated } = useTrialsStore();
 
   useEffect(() => {
-    if (user) {
-      if (anonTrials !== undefined) {
-        setAnonTrials(undefined);
+    if (!user) {
+      if (_hasHydrated && anonTrials === undefined) {
+        setAnonTrials(1);
       }
     }
-  }, [user, anonTrials, setAnonTrials]);
+  }, [user, _hasHydrated, anonTrials, setAnonTrials]);
+
+  useEffect(() => {
+    if (user) {
+      getRemainingTrials();
+    }
+  }, [user]);
 
   const fetchUserData = async () => {
     if (!user?.id) return;

@@ -17,8 +17,13 @@ export const TOAST_CONFIG = {
 };
 
 export async function adjustTrialCountIfAnonymousTrialUsed(userId: string) {
-  if (localStorage.getItem("hasTriedFree")) {
-    // Check if this was already upgraded
+  if (typeof window === "undefined") return;
+
+  const stored = localStorage.getItem("anon-trials-storage");
+  const parsed = stored ? JSON.parse(stored) : null;
+  const anonTrials = parsed?.state?.anonTrials;
+
+  if (anonTrials === 0) {
     const { data, error } = await supabase
       .from("users")
       .select("upgraded_from_anonymous")
