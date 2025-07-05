@@ -16,9 +16,9 @@ export default function UploadGuideModal({
 }: UploadGuideModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto flex flex-col rounded-lg">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto flex flex-col rounded-lg">
         <DialogTitle className="hidden"></DialogTitle>
-        <div className="flex items-center justify-center mx-auto flex-col pb-6 mt-6 max-w-120">
+        <div className="flex items-center justify-center mx-auto flex-col max-w-120 overflow-hidden">
           <div>
             <h2 className="text-green-500 flex items-center justify-center gap-1">
               <IoIosCheckmarkCircle />
@@ -28,7 +28,7 @@ export default function UploadGuideModal({
               For the best result, please use a photo with a white background, a
               single item in front view, and a clear, simple pattern.
             </p>
-            <div className="flex gap-2 items-center justify-center mt-2">
+            <div className="flex gap-2 items-center justify-center mt-2 flex-wrap">
               <Image
                 height={80}
                 width={80}
@@ -75,7 +75,7 @@ export default function UploadGuideModal({
               Avoid using photos with multiple items, busy backgrounds or
               patterns, text overlays, folds, or any obstructions.
             </p>
-            <div className="flex gap-2 items-center justify-center mt-2">
+            <div className="flex gap-2 items-center justify-center mt-2 flex-wrap">
               <Image
                 height={80}
                 width={80}
