@@ -3,7 +3,9 @@ import { cookies } from "next/headers";
 
 export async function getUserData() {
   const cookieStore = await cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
+  const supabase = createServerComponentClient({
+    cookies: () => cookieStore as any,
+  });
 
   const {
     data: { session },
