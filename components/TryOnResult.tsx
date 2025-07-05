@@ -116,7 +116,7 @@ export function TryOnResult({ result, onReset }: TryOnResultProps) {
       {/* Quality Notice */}
       <div className="text-center text-sm text-gray-600 bg-gray-100 p-2 rounded-lg">
         <p className="flex items-center gap-1">
-          <BsInfoCircleFill className="h-3 w-3" />
+          <BsInfoCircleFill className="h-3 w-3 flex-shrink-0" />
           For the best results, use clear, well-lit photos with good contrast.
           Pro subscribers enjoy enhanced processing and higher-quality outputs.
         </p>
