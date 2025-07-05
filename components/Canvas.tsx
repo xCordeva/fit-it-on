@@ -5,7 +5,6 @@ import { TryOnForm } from "@/components/TryOnForm";
 import { TryOnResult } from "@/components/TryOnResult";
 import { useModalStore } from "@/stores/useModalStore";
 
-
 export default function Canvas() {
   const [result, setResult] = useState<string | null>(null);
 
@@ -18,13 +17,21 @@ export default function Canvas() {
   };
   const { setShowUploadGuideModal } = useModalStore();
   return (
-    <main className=" border-2 bg-white shadow-xl rounded-lg w-full h-full flex justify-center p-6 py-10 overflow-auto">
+    <main
+      className={`
+  md:border-2 bg-[#f2f2f2] md:bg-white md:shadow-xl rounded-lg w-full h-full 
+  ${result ? "" : "mb-16"} md:mb-0 
+  pb-12 md:pb-0 
+  flex justify-center 
+  p-4 md:py-10 overflow-auto
+`}
+    >
       {!result ? (
         <>
           {/* Try-On Form */}
           <div className="w-full max-w-4xl mx-auto">
             <TryOnForm onResult={handleResult} />
-            <div className="text-center mt-6">
+            <div className="text-center mt-2 md:mt-6">
               <h2
                 className="text-gray-500 underline cursor-pointer inline"
                 onClick={() => {
