@@ -48,7 +48,7 @@ export default function Sidebar() {
             <Image
               height={180}
               width={180}
-              className="h-auto w-180"
+              className="max-h-10 w-180"
               src="/logo.png"
               alt="fit-it-on-logo"
             />
