@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase } from "./supabaseClient";
 
 // this is used for user inputs, since a user would upload a file (image)
 export async function uploadImageToSupabase(

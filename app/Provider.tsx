@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabaseClient";
 import { Session, User } from "@supabase/supabase-js";
 import { adjustTrialCountIfAnonymousTrialUsed } from "@/lib/utils";
 
