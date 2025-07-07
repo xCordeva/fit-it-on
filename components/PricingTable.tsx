@@ -2,23 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PLANS } from "@/lib/stripe";
+import { PLANS } from "@/lib/payments";
 import { toast } from "sonner";
 import { PiShootingStarThin } from "react-icons/pi";
 import { FaRegStar } from "react-icons/fa";
 import { LuCrown } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa";
+import { TOAST_CONFIG } from "@/lib/utils";
+import { Plan } from "@/types/plans";
 
 export function PricingTable() {
-  const handleGetStarted = async (planName: string) => {
-    toast.info(
-      "Payment integration coming soon! We'll notify you when it's ready."
-    );
-
-    // Example: You can integrate Stripe later here
-    // const response = await fetch('/api/create-checkout-session', { ... })
-    // const { url } = await response.json()
-    // window.location.href = url
+  const handleGetStarted = async (plan: Plan) => {
+    try {
+      window.location.href = plan.checkoutUrl;
+    } catch (err) {
+      toast.error("Failed to start checkout. Please try again.", {
+        ...TOAST_CONFIG.error,
+      });
+    }
   };
 
   return (
@@ -69,7 +70,7 @@ export function PricingTable() {
             </ul>
 
             <Button
-              onClick={() => handleGetStarted(plan.name)}
+              onClick={() => handleGetStarted(plan)}
               className={plan.popular ? "w-full bg-primary" : "w-full"}
               variant={plan.popular ? "default" : "outline"}
             >

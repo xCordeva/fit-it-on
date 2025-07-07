@@ -1,4 +1,6 @@
-export const PLANS = {
+import { Plan, PlanKey } from "@/types/plans";
+
+export const PLANS: Record<PlanKey, Plan> = {
   basic: {
     name: "Basic",
     price: "4.99",
