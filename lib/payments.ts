@@ -1,50 +1,48 @@
-// Payment provider placeholder - replace with your chosen payment solution
-// Examples: Stripe, PayPal, Square, Paddle, LemonSqueezy, etc.
-
 export const PLANS = {
-  pro: {
-    name: 'Pro',
-    price: 29,
-    priceId: 'pro_plan_id', // Replace with your payment provider's price/plan ID
+  basic: {
+    name: "Basic",
+    price: "4.99",
+    credits: 50,
+    checkoutUrl:
+      "https://fititon.lemonsqueezy.com/buy/4ab6a6f9-55ca-4219-9102-09676dc7bfeb?media=0&discount=0",
+    productId: 570814,
     features: [
-      'Unlimited try-ons',
-      'High-quality results',
-      'Save & organize fits',
-      'Priority processing',
-      'Export options'
-    ]
-  }
-}
-
-// Placeholder for payment provider initialization
-// Replace with your chosen payment provider's client
-export const initializePaymentProvider = () => {
-  // TODO: Initialize your payment provider here
-  // Example: return new StripeClient(apiKey)
-  // Example: return new PayPalClient(clientId)
-  console.log('Payment provider not configured yet')
-  return null
-}
-
-// Placeholder for creating checkout sessions
-export const createCheckoutSession = async (priceId: string, userId: string) => {
-  // TODO: Implement checkout session creation with your payment provider
-  console.log('Creating checkout session for:', { priceId, userId })
-  
-  // Return mock URL for now
-  return {
-    url: '/pricing?checkout=true',
-    error: null
-  }
-}
-
-// Placeholder for handling webhooks
-export const handlePaymentWebhook = async (payload: any, signature: string) => {
-  // TODO: Implement webhook handling for your payment provider
-  console.log('Payment webhook received:', { payload, signature })
-  
-  return {
-    success: true,
-    event: null
-  }
-}
+      "50 try-on images per month",
+      "Access to standard models",
+      "Email support",
+    ],
+    description:
+      "Perfect for casual users who want to explore virtual try-ons.",
+    popular: false,
+  },
+  starter: {
+    name: "Starter",
+    price: "8.99",
+    credits: 100,
+    checkoutUrl:
+      "https://fititon.lemonsqueezy.com/buy/dd624191-370a-4beb-b303-030656f26c66?media=0&discount=0",
+    productId: 570816,
+    features: [
+      "100 try-on images per month",
+      "Access to standard models",
+      "Email support",
+    ],
+    description: "Perfect for casual users exploring more styles.",
+    popular: true,
+  },
+  pro: {
+    name: "Pro",
+    price: "18.99",
+    credits: 250,
+    checkoutUrl:
+      "https://fititon.lemonsqueezy.com/buy/a4163b0f-5c76-4041-a1da-ddecca9279e8?media=0&discount=0",
+    productId: 570817,
+    features: [
+      "250 try-on images per month",
+      "Priority processing",
+      "Priority support",
+    ],
+    description: "Ideal for frequent users and fashion enthusiasts.",
+    popular: false,
+  },
+};

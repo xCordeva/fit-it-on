@@ -29,7 +29,7 @@ export default function Sidebar() {
     useModalStore();
 
   const { anonTrials } = useTrialsStore();
-  const { user, signOut } = useAuth();
+  const { user, signOut, userData } = useAuth();
   const { remainingTrials } = useTrials();
   const pathname = usePathname();
 
@@ -80,15 +80,24 @@ export default function Sidebar() {
           )}
         </div>
 
-        <Button
-          className={`bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70 overflow-hidden gap-1 ${
-            isCollapsed ? "justify-center" : "justify-start"
-          }`}
-          onClick={() => setShowUpgradeModal(true)}
-        >
-          <LuCrown className="h-5 w-5 flex-shrink-0" />
-          {!isCollapsed && <span>Unlock Pro Features</span>}
-        </Button>
+        {userData?.plan === "free" ? (
+          <Button
+            className={`bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70 overflow-hidden gap-1 ${
+              isCollapsed ? "justify-center" : "justify-start"
+            }`}
+            onClick={() => setShowUpgradeModal(true)}
+          >
+            <LuCrown className="h-5 w-5 flex-shrink-0" />
+            {!isCollapsed && <span>Unlock Pro Features</span>}
+          </Button>
+        ) : (
+          !isCollapsed && (
+            <div className="flex items-center gap-2 p-2 rounded-lg justify-center text-sm font-bold bg-[#facc15]">
+              <LuCrown className="text-black" />
+              <span className="text-black">Current plan: {userData?.plan}</span>
+            </div>
+          )
+        )}
 
         {/* Links */}
         <Button

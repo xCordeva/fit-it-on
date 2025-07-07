@@ -9,12 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { PLANS } from "@/lib/stripe";
+import { PLANS } from "@/lib/payments";
 import { toast } from "sonner";
 import { LuLoaderCircle } from "react-icons/lu";
 import { LuCrown } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
+import { TOAST_CONFIG } from "@/lib/utils";
 
 interface UpgradeModalProps {
   open: boolean;
@@ -23,28 +24,16 @@ interface UpgradeModalProps {
 
 export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
   const [loading, setLoading] = useState(false);
-  const [selectedPlan, setSelectedPlan] =
-    useState<keyof typeof PLANS>("starter");
+  const [selectedPlan, setSelectedPlan] = useState<
+    (typeof PLANS)[keyof typeof PLANS]
+  >(PLANS.starter);
 
   const handleUpgrade = async () => {
     setLoading(true);
-
     try {
-      toast.info(
-        "Payment integration coming soon! We'll notify you when it's ready."
-      );
-      onOpenChange(false);
-
-      // Example Stripe checkout redirect
-      // const response = await fetch("/api/create-checkout-session", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ priceId: PLANS[selectedPlan].priceId }),
-      // });
-      // const { url } = await response.json();
-      // window.location.href = url;
-    } catch (error) {
-      toast.error("Failed to start checkout. Please try again.");
+      window.location.href = selectedPlan.checkoutUrl;
+    } catch (err) {
+      toast.error("Failed to start checkout. Please try again.", {...TOAST_CONFIG.error});
     } finally {
       setLoading(false);
     }
@@ -68,9 +57,9 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
           {Object.entries(PLANS).map(([key, plan]) => (
             <div
               key={key}
-              onClick={() => setSelectedPlan(key as keyof typeof PLANS)}
+              onClick={() => setSelectedPlan(plan)}
               className={`border rounded-lg cursor-pointer p-4 transition hover:border-primary ${
-                selectedPlan === key
+                selectedPlan.name.toLocaleLowerCase() === key
                   ? "ring-2 ring-primary border-primary"
                   : "border-gray-300"
               }`}
@@ -116,7 +105,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
             ) : (
               <>
                 <LuCrown className="mr-2 h-4 w-4" />
-                Upgrade to {PLANS[selectedPlan].name}
+                Upgrade to {selectedPlan.name}
               </>
             )}
           </Button>
