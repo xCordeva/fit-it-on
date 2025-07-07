@@ -1,0 +1,23 @@
+name: Downgrade expired subscriptions
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Every day at midnight UTC
+
+jobs:
+  downgrade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - run: pnpm install
+
+      - run: pnpm tsx scripts/downgradeExpiredSubscriptions.ts
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
