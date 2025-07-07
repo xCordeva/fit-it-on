@@ -53,3 +53,18 @@ export async function adjustTrialCountIfAnonymousTrialUsed(userId: string) {
     }
   }
 }
+
+export async function fetchFreshUserData(userId: string) {
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    console.error("Failed to fetch user data:", error);
+    return null;
+  }
+
+  return data;
+}

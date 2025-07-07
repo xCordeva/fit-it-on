@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Session, User } from "@supabase/supabase-js";
 import { adjustTrialCountIfAnonymousTrialUsed } from "@/lib/utils";
+import { fetchFreshUserData } from "@/lib/utils";
 
 interface UserData {
   trial_count: number;
@@ -83,6 +84,8 @@ export function AuthProvider({
         (event === "SIGNED_IN" || event === "USER_UPDATED")
       ) {
         await adjustTrialCountIfAnonymousTrialUsed(currentSession.user.id);
+        const freshData = await fetchFreshUserData(currentSession.user.id);
+        setUserDataState(freshData);
       }
     });
 
@@ -99,6 +102,10 @@ export function AuthProvider({
     signIn: async (email: string, password: string) => {
       setLoading(true);
       const res = await supabase.auth.signInWithPassword({ email, password });
+      if (res.data?.user) {
+        const freshData = await fetchFreshUserData(res.data.user.id);
+        setUserDataState(freshData);
+      }
       setLoading(false);
       return res;
     },

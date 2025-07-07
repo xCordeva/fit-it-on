@@ -80,7 +80,7 @@ export default function Sidebar() {
           )}
         </div>
 
-        {userData?.plan === "free" ? (
+        {!user || userData?.plan === "free" ? (
           <Button
             className={`bg-[#facc15] text-black font-bold hover:bg-[#facc15]/70 overflow-hidden gap-1 ${
               isCollapsed ? "justify-center" : "justify-start"
