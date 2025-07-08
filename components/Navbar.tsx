@@ -45,7 +45,7 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
-              href="/"
+              href="/app"
               className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
             >
               <GiClothes className="size-5" />
@@ -87,11 +87,7 @@ export function Navbar() {
                 )}
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="gap-2"
-                    >
+                    <Button variant="ghost" size="sm" className="gap-2">
                       {user.user_metadata.avatar_url ? (
                         <Image
                           src={user.user_metadata.avatar_url}
