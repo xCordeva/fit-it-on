@@ -12,6 +12,8 @@ import { useAuth } from "@/app/Provider";
 import { useModalStore } from "@/stores/useModalStore";
 import { UpgradeModal } from "./UpgradeModal";
 import { useTrialsStore } from "@/stores/useTrialsStore";
+import { FaArrowLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 export default function AccountSettings({
   session,
@@ -21,6 +23,7 @@ export default function AccountSettings({
   if (!session) {
     redirect("/login");
   }
+  const router = useRouter();
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const plan = Object.values(PLANS).find(
@@ -47,7 +50,15 @@ export default function AccountSettings({
 
   return (
     <div className="flex flex-col max-w-2xl mx-auto py-12 px-4">
-      <h1 className="text-2xl font-bold mb-6">Your Account</h1>
+      <div className="flex items-center gap-2 mb-6">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center text-gray-700 hover:text-black"
+        >
+          <FaArrowLeft className="w-5 h-5 cursor-pointer" />
+        </button>
+        <h1 className="text-2xl font-bold ml-2">Your Account</h1>
+      </div>
 
       <div className="border rounded-lg p-4 mb-6">
         <h2 className="font-semibold text-lg mb-2">User Info</h2>
