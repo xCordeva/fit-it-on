@@ -1,16 +1,41 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import { useGalleryStore } from "@/stores/useGalleryStore";
 import { useEffect } from "react";
 import { useAuth } from "@/app/Provider";
+import ImagesContainer from "@/components/ImagesContainer";
+import Sidebar from "@/components/Sidebar";
+import { SignInModal } from "@/components/SignInModal";
+import { UpgradeModal } from "@/components/UpgradeModal";
+import { useModalStore } from "@/stores/useModalStore";
+import { useSidebarStore } from "@/stores/useSidebarStore";
+import BottomNavbar from "@/components/BottomNavbar";
+
+const VALID_FOLDERS = ["person", "garment", "results"] as const;
+type FolderType = (typeof VALID_FOLDERS)[number];
 
 export default function GalleryFolderPage() {
   const { user } = useAuth();
   const { folder } = useParams() as {
-    folder: "person" | "garment" | "results";
+    folder: FolderType;
   };
-  const { initializeGallery, person, garment, results } = useGalleryStore();
+
+  const { isCollapsed } = useSidebarStore();
+  const {
+    showUpgradeModal,
+    setShowUpgradeModal,
+    showSignInModal,
+    setShowSignInModal,
+  } = useModalStore();
+
+  // Check if folder is valid
+  if (!VALID_FOLDERS.includes(folder as FolderType)) {
+    return notFound();
+  }
+
+  const { initializeGallery, person, garment, results, loading } =
+    useGalleryStore();
 
   useEffect(() => {
     if (user?.id) {
@@ -22,23 +47,27 @@ export default function GalleryFolderPage() {
     folder === "person" ? person : folder === "garment" ? garment : results;
 
   return (
-    <main className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4 capitalize">{folder} Gallery</h1>
-      {folderImages.length === 0 ? (
-        <p>No images found in this folder.</p>
-      ) : (
-        <div className="grid grid-cols-3 sm:grid-cols-4 gap-4">
-          {folderImages.map((url, idx) => (
-            <img
-              key={idx}
-              src={url}
-              alt={`${folder}-${idx}`}
-              className="rounded cursor-pointer hover:scale-105 transition-transform"
-              loading="lazy"
-            />
-          ))}
-        </div>
-      )}
-    </main>
+    <div className="flex h-screen w-full bg-[#f2f2f2]">
+      <div
+        className={`${
+          isCollapsed ? "w-10" : "w-50"
+        } flex-shrink-0 transition-all duration-300 hidden md:flex`}
+      >
+        <Sidebar />
+      </div>
+      <BottomNavbar />
+      <div className="flex-1 p-2 flex overflow-auto">
+        <ImagesContainer
+          folder={folder}
+          folderImages={folderImages}
+          loading={loading}
+        />
+      </div>
+      <UpgradeModal
+        open={showUpgradeModal}
+        onOpenChange={setShowUpgradeModal}
+      />
+      <SignInModal open={showSignInModal} onOpenChange={setShowSignInModal} />
+    </div>
   );
 }
