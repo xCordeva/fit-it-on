@@ -3,6 +3,7 @@ import { HiOutlinePhotograph } from "react-icons/hi";
 import { Button } from "./ui/button";
 import { useReuseStore } from "@/stores/useReuseStore";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface ImagesContainerProps {
   user: User | null;
@@ -21,7 +22,7 @@ export default function ImagesContainer({
 }: ImagesContainerProps) {
   const router = useRouter();
   const { setReuseTarget } = useReuseStore();
-
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   return (
     <main className="flex justify-center p-4 md:py-10 bg-[#f2f2f2] md:bg-white rounded-lg md:shadow-xl w-full h-full mb-16 md:mb-auto overflow-auto">
       {!user ? (
@@ -61,10 +62,14 @@ export default function ImagesContainer({
                 {folderImages.map((url, idx) => (
                   <div
                     key={idx}
-                    className="
+                    className={`
             group relative rounded-lg cursor-pointer overflow-hidden border-2 border-gray-400 
             pb-[100%] transition-transform hover:scale-105
-          "
+          `}
+                    onClick={() => {
+                      // Toggle selection
+                      setActiveIndex((prev) => (prev === idx ? null : idx));
+                    }}
                   >
                     <img
                       src={url}
@@ -75,17 +80,22 @@ export default function ImagesContainer({
 
                     {folder !== "results" && (
                       <div
-                        className="
-              absolute bottom-4 left-0 right-0 flex justify-center 
-              opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 
-              transition-all duration-300 pointer-events-none
-            "
+                        className={`
+                absolute bottom-4 left-0 right-0 flex justify-center transition-all duration-300
+                ${
+                  activeIndex === idx
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0"
+                }
+                pointer-events-none
+              `}
                       >
                         <Button
                           variant="default"
                           size="sm"
                           className="pointer-events-auto shadow-md"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation(); // prevent card click
                             setReuseTarget(url, folder);
                             router.push("/app");
                           }}
