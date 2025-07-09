@@ -38,7 +38,7 @@ export default function Gallery({
     hasValidImages(results);
 
   return (
-    <main className="flex justify-center p-4 md:py-10 bg-[#f2f2f2] md:bg-white rounded-lg md:shadow-xl w-full h-full overflow-auto">
+    <main className="flex justify-center p-0 md:p-4 md:py-10 bg-[#f2f2f2] md:bg-white rounded-lg md:shadow-xl w-full h-full overflow-auto">
       <div className="p-6 w-full max-w-6xl">
         {!user ? (
           <div className="mb-6 bg-yellow-50 border border-yellow-200 p-4 rounded-md text-sm text-yellow-800 shadow-sm w-fit mx-auto">
