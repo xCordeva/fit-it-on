@@ -1,9 +1,6 @@
-"use client";
-
 interface FolderCardProps {
   title: string;
   images: string[];
-
   onClick?: () => void;
 }
 
@@ -18,17 +15,9 @@ export default function FolderCard({
   return (
     <div
       onClick={onClick}
-      className={`
-        cursor-pointer w-65 h-65
-        flex flex-col overflow-hidden
-        shadow-lg
-        pointer-events-none
-      `}
+      className="cursor-pointer w-65 h-65 flex flex-col overflow-hidden shadow-md transition-all duration-300 ease-in-out hover:-translate-y-2 hover:shadow-xl"
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" && onClick) onClick();
-      }}
     >
       <>
         {/* Folder Body with Image */}
