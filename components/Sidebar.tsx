@@ -214,10 +214,15 @@ export default function Sidebar() {
               <Link
                 className="text-xs hover:underline text-nowrap"
                 href={"/privacy-policy"}
+                target="_blank"
               >
                 Privacy Policy
               </Link>
-              <Link className="text-xs hover:underline text-nowrap" href={"/"}>
+              <Link
+                className="text-xs hover:underline text-nowrap"
+                href={"/terms-of-use"}
+                target="_blank"
+              >
                 Terms of use
               </Link>
             </>
