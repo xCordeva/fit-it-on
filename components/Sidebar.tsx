@@ -123,7 +123,7 @@ export default function Sidebar() {
             isCollapsed ? "justify-center" : "justify-start"
           }
           ${
-            pathname === "/gallery"
+            pathname.startsWith("/gallery")
               ? "bg-gray-200 border-gray-500 shadow-lg"
               : "hover:bg-gray-200 border-transparent"
           }
@@ -211,7 +211,7 @@ export default function Sidebar() {
         >
           {!isCollapsed && (
             <div className="flex gap-2 flex-col">
-              <div className="flex gap-4">
+              <div className="flex gap-4 pt-4">
                 <Link
                   className="text-xs hover:underline text-nowrap"
                   href={"/privacy-policy"}

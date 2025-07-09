@@ -58,9 +58,11 @@ export default function GalleryFolderPage() {
       <BottomNavbar />
       <div className="flex-1 p-2 flex overflow-auto">
         <ImagesContainer
+          user={user}
           folder={folder}
           folderImages={folderImages}
           loading={loading}
+          setShowSignInModal={setShowSignInModal}
         />
       </div>
       <UpgradeModal
