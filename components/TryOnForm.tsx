@@ -50,7 +50,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
   }, [imageUrl, target, clearReuse]);
   const { person, garment } = useGalleryStore();
   const showChooseFromGalleryButton = !!(person?.length || garment?.length);
-
+  const { refetchGallery } = useGalleryStore();
   const handleImageUpload = (file: File, type: "person" | "garment") => {
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload a valid image file", {
@@ -150,9 +150,10 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         user?.id ?? "anon"
       );
 
-      // Decrement trial for authenticated users
+      // Decrement trial for authenticated users and refetch their gallery
       if (user) {
         await decrementTrial();
+        refetchGallery(user.id);
       } else {
         markAnonymousTrialUsed();
       }

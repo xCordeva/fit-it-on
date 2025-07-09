@@ -8,6 +8,7 @@ export type GalleryStore = {
   loading: boolean;
   initialized: boolean;
   initializeGallery: (userId: string) => Promise<void>;
+  refetchGallery: (userId: string) => Promise<void>;
 };
 
 export const useGalleryStore = create<GalleryStore>((set, get) => ({
@@ -20,6 +21,13 @@ export const useGalleryStore = create<GalleryStore>((set, get) => ({
   initializeGallery: async (userId) => {
     const { initialized } = get();
     if (initialized || !userId) return;
+    await get().refetchGallery(userId);
+    set({ initialized: true });
+  },
+
+  refetchGallery: async (userId) => {
+    if (!userId) return;
+    set({ loading: true });
 
     try {
       const [personUrls, garmentUrls, resultUrls] = await Promise.all([
@@ -32,10 +40,9 @@ export const useGalleryStore = create<GalleryStore>((set, get) => ({
         person: personUrls ?? [],
         garment: garmentUrls ?? [],
         results: resultUrls ?? [],
-        initialized: true,
       });
     } catch (error) {
-      console.error("Failed to load gallery images:", error);
+      console.error("Failed to refetch gallery images:", error);
     } finally {
       set({ loading: false });
     }
