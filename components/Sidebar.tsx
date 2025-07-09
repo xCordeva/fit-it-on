@@ -210,22 +210,34 @@ export default function Sidebar() {
           } flex items-center justify-center gap-4  transition-h duration-300"`}
         >
           {!isCollapsed && (
-            <>
-              <Link
-                className="text-xs hover:underline text-nowrap"
-                href={"/privacy-policy"}
-                target="_blank"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                className="text-xs hover:underline text-nowrap"
-                href={"/terms-of-use"}
-                target="_blank"
-              >
-                Terms of use
-              </Link>
-            </>
+            <div className="flex gap-2 flex-col">
+              <div className="flex gap-4">
+                <Link
+                  className="text-xs hover:underline text-nowrap"
+                  href={"/privacy-policy"}
+                  target="_blank"
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  className="text-xs hover:underline text-nowrap"
+                  href={"/terms-of-use"}
+                  target="_blank"
+                >
+                  Terms of use
+                </Link>
+              </div>
+              <div className="text-xs text-center">
+                Having trouble?{" "}
+                <Link
+                  className="text-gray-600 underline hover:no-underline text-nowrap"
+                  href={"/contact"}
+                  target="_blank"
+                >
+                  Contact us
+                </Link>
+              </div>
+            </div>
           )}
         </div>
         <TbLayoutSidebarRightExpand
