@@ -37,6 +37,7 @@ export function GalleryModal({
       }}
     >
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto flex flex-col rounded-lg p-8">
+        <DialogTitle className="hidden">{type} Gallery</DialogTitle>
         {filteredImages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             No saved {type} images yet.

@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { useReuseStore } from "@/stores/useReuseStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ResultsCanvasCard } from "./ResultsCanvasCard";
 
 interface ImagesContainerProps {
   user: User | null;
@@ -23,6 +24,7 @@ export default function ImagesContainer({
   const router = useRouter();
   const { setReuseTarget } = useReuseStore();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   return (
     <main className="flex justify-center p-4 md:py-10 bg-[#f2f2f2] md:bg-white rounded-lg md:shadow-xl w-full h-full mb-16 md:mb-auto overflow-auto">
       {!user ? (
@@ -59,43 +61,51 @@ export default function ImagesContainer({
                 {folder} Gallery
               </h1>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {folderImages.map((url, idx) => (
-                  <div
-                    key={idx}
-                    className={`
-            group relative rounded-lg cursor-pointer overflow-hidden border-2 border-gray-400 
-            pb-[100%] transition-transform hover:scale-105
-          `}
-                    onClick={() => {
-                      // Toggle selection
-                      setActiveIndex((prev) => (prev === idx ? null : idx));
-                    }}
-                  >
-                    <img
-                      src={url}
-                      alt={`${folder}-${idx}`}
-                      className="absolute inset-0 w-full h-full object-cover"
-                      loading="lazy"
+                {folderImages.map((url, idx) =>
+                  folder === "results" ? (
+                    <ResultsCanvasCard
+                      key={idx}
+                      url={url}
+                      isActive={activeIndex === idx}
+                      onClick={() =>
+                        setActiveIndex((prev) => (prev === idx ? null : idx))
+                      }
+                      onDownloadClick={(e) => {
+                        e.stopPropagation();
+                        setActiveIndex(idx);
+                      }}
                     />
-
-                    {folder !== "results" && (
+                  ) : (
+                    <div
+                      key={idx}
+                      className={`group relative rounded-lg cursor-pointer overflow-hidden pb-[100%] transition-transform hover:scale-105 ${
+                        activeIndex === idx
+                          ? "border-primary ring-2"
+                          : "border-gray-400 border-2"
+                      }`}
+                      onClick={() =>
+                        setActiveIndex((prev) => (prev === idx ? null : idx))
+                      }
+                    >
+                      <img
+                        src={url}
+                        alt={`${folder}-${idx}`}
+                        className="absolute inset-0 w-full h-full object-cover"
+                        loading="lazy"
+                      />
                       <div
-                        className={`
-                absolute bottom-4 left-0 right-0 flex justify-center transition-all duration-300
-                ${
-                  activeIndex === idx
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0"
-                }
-                pointer-events-none
-              `}
+                        className={`absolute bottom-4 left-0 right-0 flex justify-center transition-all duration-300 ${
+                          activeIndex === idx
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0"
+                        }`}
                       >
                         <Button
                           variant="default"
                           size="sm"
                           className="pointer-events-auto shadow-md"
                           onClick={(e) => {
-                            e.stopPropagation(); // prevent card click
+                            e.stopPropagation();
                             setReuseTarget(url, folder);
                             router.push("/app");
                           }}
@@ -103,9 +113,9 @@ export default function ImagesContainer({
                           Reuse this image
                         </Button>
                       </div>
-                    )}
-                  </div>
-                ))}
+                    </div>
+                  )
+                )}
               </div>
             </>
           )}
