@@ -211,7 +211,10 @@ export default function Sidebar() {
         >
           {!isCollapsed && (
             <>
-              <Link className="text-xs hover:underline text-nowrap" href={"/"}>
+              <Link
+                className="text-xs hover:underline text-nowrap"
+                href={"/privacy-policy"}
+              >
                 Privacy Policy
               </Link>
               <Link className="text-xs hover:underline text-nowrap" href={"/"}>
