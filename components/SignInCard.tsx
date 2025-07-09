@@ -36,9 +36,10 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
       toast.success("Login successful, welcome back!", {
         ...TOAST_CONFIG.success,
       });
-      router.push("/app");
       if (modal) {
         setShowSignInModal(false);
+      } else {
+        router.push("/app");
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to sign in", {
