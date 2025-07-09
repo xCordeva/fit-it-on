@@ -8,7 +8,10 @@ import { User } from "@supabase/supabase-js";
 import { HiOutlinePhotograph } from "react-icons/hi";
 
 interface GalleryProps
-  extends Omit<GalleryStore, "initializeGallery" | "initialized"> {
+  extends Omit<
+    GalleryStore,
+    "initializeGallery" | "refetchGallery" | "initialized"
+  > {
   user: User | null;
 }
 
