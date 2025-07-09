@@ -17,6 +17,7 @@ import { FaEye } from "react-icons/fa";
 import { LuCrown } from "react-icons/lu";
 import { useCanvasImageDrawer } from "@/hooks/useCanvasImageDrawer";
 import { useDownloadTryOnResult } from "@/hooks/useDownloadResult";
+import { useAuth } from "@/app/Provider";
 
 interface TryOnResultProps {
   result: string;
@@ -24,10 +25,11 @@ interface TryOnResultProps {
 }
 
 export function TryOnResult({ result, onReset }: TryOnResultProps) {
+  const { userData } = useAuth();
   const [loading, setLoading] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null); // Ref for the canvas element
-  const isProUser = false;
+  const isProUser = (userData?.plan ?? "free") !== "free";
 
   const drawImage = useCanvasImageDrawer();
   const handleDownload = useDownloadTryOnResult(

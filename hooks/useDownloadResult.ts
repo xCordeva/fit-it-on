@@ -16,6 +16,10 @@ export function useDownloadTryOnResult(
 
   const handleDownload = useCallback(
     async (quality: "low" | "high") => {
+      if (!isProUser && quality === "high") {
+        setShowUpgradeModal(true);
+        return;
+      }
       const canvas = canvasRef.current;
       if (!canvas || !canvas.getContext("2d")) {
         toast.error("Image not loaded on canvas yet.", {
