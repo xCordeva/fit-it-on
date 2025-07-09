@@ -40,7 +40,11 @@ export default function ImagesContainer({
         <div className="max-w-6xl w-full mb-8">
           {loading ? (
             <div className="flex flex-col items-center justify-center min-h-[90vh]">
-              <span className="loader"></span>Loading images...
+              <img
+                src="/loading.gif"
+                alt="fit-it-on-loading-gif"
+                className="w-auto h-40"
+              />
             </div>
           ) : folderImages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[90vh] text-gray-500 space-y-3 text-center px-4">
