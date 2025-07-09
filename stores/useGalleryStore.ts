@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { fetchUserPhotoFromSupabase } from "@/lib/galleryHelpers";
 
-type GalleryStore = {
+export type GalleryStore = {
   person: string[];
   garment: string[];
   results: string[];
