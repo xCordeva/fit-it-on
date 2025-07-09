@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload, Sparkles, Loader2 } from "lucide-react";
@@ -14,17 +14,20 @@ import {
   uploadImageFromUrlToSupabase,
   uploadImageToSupabase,
 } from "@/lib/tryOnHelpers";
+import { useReuseStore } from "@/stores/useReuseStore";
+import { useGalleryStore } from "@/stores/useGalleryStore";
 
 interface TryOnFormProps {
   onResult: (result: string) => void;
 }
 
 export function TryOnForm({ onResult }: TryOnFormProps) {
-  const [personImage, setPersonImage] = useState<File | null>(null);
-  const [garmentImage, setGarmentImage] = useState<File | null>(null);
+  const [personImage, setPersonImage] = useState<File | string | null>(null);
+  const [garmentImage, setGarmentImage] = useState<File | string | null>(null);
 
   const [loading, setLoading] = useState(false);
-  const { setShowSignInModal, setShowUpgradeModal } = useModalStore();
+  const { setShowSignInModal, setShowUpgradeModal, setShowGalleryModal } =
+    useModalStore();
   const [personDragCounter, setPersonDragCounter] = useState(0);
   const [garmentDragCounter, setGarmentDragCounter] = useState(0);
 
@@ -33,6 +36,20 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
 
   const { canTryOn, decrementTrial, markAnonymousTrialUsed } = useTrials();
   const { user } = useAuth();
+  const { imageUrl, target, clearReuse } = useReuseStore();
+
+  useEffect(() => {
+    if (imageUrl && target) {
+      if (target === "person") {
+        setPersonImage(imageUrl);
+      } else {
+        setGarmentImage(imageUrl);
+      }
+      clearReuse();
+    }
+  }, [imageUrl, target, clearReuse]);
+  const { person, garment } = useGalleryStore();
+  const showChooseFromGalleryButton = !!(person?.length || garment?.length);
 
   const handleImageUpload = (file: File, type: "person" | "garment") => {
     if (!file.type.startsWith("image/")) {
@@ -87,16 +104,29 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       const formData = new FormData();
       formData.append("personImage", personImage);
       formData.append("garmentImage", garmentImage);
-      const modelImageUrl = await uploadImageToSupabase(
-        personImage,
-        "person",
-        user?.id ?? "anon"
-      );
-      const garmentImageUrl = await uploadImageToSupabase(
-        garmentImage,
-        "garment",
-        user?.id ?? "anon"
-      );
+
+      let modelImageUrl: string;
+      let garmentImageUrl: string;
+      if (typeof personImage === "string") {
+        modelImageUrl = personImage;
+      } else {
+        modelImageUrl = await uploadImageToSupabase(
+          personImage,
+          "person",
+          user?.id ?? "anon"
+        );
+      }
+
+      if (typeof garmentImage === "string") {
+        garmentImageUrl = garmentImage;
+      } else {
+        garmentImageUrl = await uploadImageToSupabase(
+          garmentImage,
+          "garment",
+          user?.id ?? "anon"
+        );
+      }
+
       const response = {
         ok: true,
         status: 200,
@@ -173,7 +203,11 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               <div className="mb-4">
                 {personImage ? (
                   <img
-                    src={URL.createObjectURL(personImage)}
+                    src={
+                      typeof personImage === "string"
+                        ? personImage
+                        : URL.createObjectURL(personImage)
+                    }
                     alt="Person"
                     className="w-full h-100 object-cover rounded-lg mx-auto"
                   />
@@ -187,13 +221,24 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               <p className="text-sm text-gray-600 mb-4">
                 Clear photo of yourself (front-facing works best)
               </p>
-              <Button
-                variant="outline"
-                onClick={() => personInputRef.current?.click()}
-                className="w-full"
-              >
-                {personImage ? "Change Photo" : "Choose Photo"}
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => personInputRef.current?.click()}
+                  className="w-full"
+                >
+                  {personImage ? "Change Photo" : "Upload Photo"}
+                </Button>
+                {showChooseFromGalleryButton && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowGalleryModal("person")}
+                    className="w-full"
+                  >
+                    Choose from Your Gallery
+                  </Button>
+                )}
+              </div>
               <input
                 ref={personInputRef}
                 type="file"
@@ -237,7 +282,11 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               <div className="mb-4">
                 {garmentImage ? (
                   <img
-                    src={URL.createObjectURL(garmentImage)}
+                    src={
+                      typeof garmentImage === "string"
+                        ? garmentImage
+                        : URL.createObjectURL(garmentImage)
+                    }
                     alt="Garment"
                     className="w-full h-100 object-cover rounded-lg mx-auto"
                   />
@@ -251,13 +300,24 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               <p className="text-sm text-gray-600 mb-4">
                 Clothing item you want to try on
               </p>
-              <Button
-                variant="outline"
-                onClick={() => garmentInputRef.current?.click()}
-                className="w-full"
-              >
-                {garmentImage ? "Change Garment" : "Choose Garment"}
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => garmentInputRef.current?.click()}
+                  className="w-full"
+                >
+                  {garmentImage ? "Change Garment" : "Choose Garment"}
+                </Button>
+                {showChooseFromGalleryButton && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowGalleryModal("garment")}
+                    className="w-full"
+                  >
+                    Choose from Your Gallery
+                  </Button>
+                )}
+              </div>
               <input
                 ref={garmentInputRef}
                 type="file"

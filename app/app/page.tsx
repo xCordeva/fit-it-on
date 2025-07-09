@@ -2,14 +2,19 @@
 
 import BottomNavbar from "@/components/BottomNavbar";
 import Canvas from "@/components/Canvas";
+import { GalleryModal } from "@/components/GalleryModal";
 import Sidebar from "@/components/Sidebar";
 import { SignInModal } from "@/components/SignInModal";
 import { UpgradeModal } from "@/components/UpgradeModal";
 import UploadGuideModal from "@/components/UploadGuideModal";
+import { useGalleryStore } from "@/stores/useGalleryStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { useSidebarStore } from "@/stores/useSidebarStore";
+import { useEffect } from "react";
+import { useAuth } from "../Provider";
 
 export default function AppPage() {
+  const { user } = useAuth();
   const { isCollapsed } = useSidebarStore();
   const {
     showUploadGuideModal,
@@ -18,7 +23,20 @@ export default function AppPage() {
     setShowUpgradeModal,
     showSignInModal,
     setShowSignInModal,
+    showGalleryModal,
+    setShowGalleryModal,
   } = useModalStore();
+
+  const { initializeGallery, person, garment } = useGalleryStore();
+
+  useEffect(() => {
+    if (user?.id) {
+      initializeGallery(user.id);
+    }
+  }, [user]);
+
+  const folderImages = showGalleryModal === "person" ? person : garment;
+
   return (
     <>
       <div className="flex h-screen w-full bg-[#f2f2f2]">
@@ -43,6 +61,12 @@ export default function AppPage() {
         onOpenChange={setShowUpgradeModal}
       />
       <SignInModal open={showSignInModal} onOpenChange={setShowSignInModal} />
+      <GalleryModal
+        open={showGalleryModal}
+        onOpenChange={setShowGalleryModal}
+        images={folderImages}
+        type={showGalleryModal as "person" | "garment"}
+      />
     </>
   );
 }
