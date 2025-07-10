@@ -25,7 +25,7 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormInputs>();
-  const { signIn, signInWithGoogle } = useAuth();
+  const { signIn, signInWithGoogle, signInWithFacebook } = useAuth();
   const router = useRouter();
   const { setShowSignInModal } = useModalStore();
   const onSubmit = async (data: LoginFormInputs) => {
@@ -50,6 +50,9 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
 
   const handleGoogleSignIn = async () => {
     await signInWithGoogle();
+  };
+  const handleFacebookSignIn = async () => {
+    await signInWithFacebook();
   };
   const Wrapper = modal ? "div" : Card;
   const SecondaryWrapper = modal ? "div" : CardContent;
@@ -93,7 +96,7 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
           </Button>
           {/* Sign in with Facebook */}
           <Button
-            onClick={handleGoogleSignIn}
+            onClick={handleFacebookSignIn}
             variant="outline"
             className="w-full flex  items-center justify-center gap-2"
           >

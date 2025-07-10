@@ -19,6 +19,7 @@ interface AuthContextType {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<any>; // Adjust return type if needed
   signInWithGoogle: () => Promise<any>;
+  signInWithFacebook: () => Promise<any>;
   signUp: (email: string, password: string, name: string) => Promise<any>;
   signOut: () => Promise<any>;
   resetPassword: (email: string) => Promise<any>;
@@ -114,6 +115,16 @@ export function AuthProvider({
       setLoading(true);
       const res = await supabase.auth.signInWithOAuth({
         provider: "google",
+        options: { redirectTo: `/app` },
+      });
+      setLoading(false);
+      return res;
+    },
+
+    signInWithFacebook: async () => {
+      setLoading(true);
+      const res = await supabase.auth.signInWithOAuth({
+        provider: "facebook",
         options: { redirectTo: `/app` },
       });
       setLoading(false);
