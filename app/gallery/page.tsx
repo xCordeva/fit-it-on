@@ -40,7 +40,7 @@ export default function GalleryPage() {
         <Sidebar />
       </div>
       <BottomNavbar />
-      <div className="flex-1 p-0 md:p-2 mb-18 flex overflow-y-auto">
+      <div className="flex-1 p-0 md:p-2 mb-18 md:mb-0 flex overflow-y-auto">
         <Gallery
           user={user}
           person={person}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Menu, X, User, LogOut } from "lucide-react";
+import { FaRegUser } from "react-icons/fa";
 import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import {
@@ -15,8 +15,10 @@ import {
 import Image from "next/image";
 import { GiClothes } from "react-icons/gi";
 import { IoIosPricetags } from "react-icons/io";
-import { BsQuestionDiamondFill } from "react-icons/bs";
 import { GrGallery } from "react-icons/gr";
+import { IoClose } from "react-icons/io5";
+import { IoIosMenu } from "react-icons/io";
+import { LuLogOut } from "react-icons/lu";
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -37,13 +39,14 @@ export function Navbar() {
             <Image
               height={120}
               width={120}
+              className="max-h-8 w-auto"
               src="/logo.png"
               alt="fit-it-on-logo"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-10">
             <Link
               href="/app"
               className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
@@ -51,28 +54,19 @@ export function Navbar() {
               <GiClothes className="size-5" />
               Studio
             </Link>
-            {user && (
-              <Link
-                href="/gallery"
-                className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
-              >
-                <GrGallery className="size-5" />
-                Gallery
-              </Link>
-            )}
+            <Link
+              href="/gallery"
+              className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
+            >
+              <GrGallery className="size-5" />
+              Gallery
+            </Link>
             <Link
               href="/pricing"
               className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
             >
               <IoIosPricetags className="size-5" />
               Pricing
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
-            >
-              <BsQuestionDiamondFill className="size-5" />
-              FAQs
             </Link>
           </div>
 
@@ -97,7 +91,7 @@ export function Navbar() {
                           alt="user-image"
                         />
                       ) : (
-                        <User className="h-4 w-4" />
+                        <FaRegUser className="h-5 w-5" />
                       )}
                       Account
                     </Button>
@@ -110,7 +104,7 @@ export function Navbar() {
                       onClick={handleSignOut}
                       className="gap-2 cursor-pointer"
                     >
-                      <LogOut className="h-4 w-4" />
+                      <LuLogOut className="h-5 w-5" />
                       Sign Out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -136,9 +130,9 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <X className="h-5 w-5" />
+                <IoClose className="h-5 w-5" />
               ) : (
-                <Menu className="h-5 w-5" />
+                <IoIosMenu className="h-5 w-5" />
               )}
             </Button>
           </div>
@@ -198,7 +192,7 @@ export function Navbar() {
                   className="w-full justify-start gap-2"
                   onClick={handleSignOut}
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LuLogOut className="h-4 w-4" />
                   Sign Out
                 </Button>
               </>
