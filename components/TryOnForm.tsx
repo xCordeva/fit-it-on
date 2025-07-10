@@ -337,9 +337,9 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       {/* Try-On Button */}
       <div className="text-center">
         <Button
+          variant="cool"
           onClick={handleSubmit}
           disabled={!personImage || !garmentImage || loading}
-          className="bg-primary hover:bg-primary/90 text-white px-8 py-3 text-lg"
           size="lg"
         >
           {loading ? (
