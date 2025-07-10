@@ -14,7 +14,7 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "FitItOn.io - AI Virtual Try-On",
+  title: "Fit It On - AI Virtual Try-On",
   description:
     "Try on any outfit before you buy with AI-powered virtual try-on technology",
 };
