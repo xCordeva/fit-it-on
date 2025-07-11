@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Footer from "@/components/Footer";
 
 export default function PricingPage() {
   return (
@@ -110,6 +111,7 @@ export default function PricingPage() {
           </Accordion>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
