@@ -57,21 +57,6 @@ export function AuthProvider({
   );
 
   useEffect(() => {
-    // Only set loading to true if we don't have an initial session
-    // and need to fetch it (e.g., on first client-side render if no initialSession was provided)
-    if (!initialSession) {
-      setLoading(true);
-      const getInitialSession = async () => {
-        const {
-          data: { session: fetchedSession },
-        } = await supabase.auth.getSession();
-
-        setSessionState(fetchedSession);
-        setUserState(fetchedSession?.user ?? null);
-        setLoading(false);
-      };
-      getInitialSession();
-    } // Set up real-time auth state changes
 
     const {
       data: { subscription },
@@ -91,7 +76,7 @@ export function AuthProvider({
     });
 
     return () => subscription.unsubscribe();
-  }, [initialSession]); // Re-run if initialSession changes (e.g., hot module reloading) // Memoize the context value to prevent unnecessary re-renders of consumers
+  }, []);
 
   const contextValue = {
     session,
