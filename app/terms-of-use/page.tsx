@@ -207,10 +207,10 @@ export default function TermsOfUse() {
         <p className="text-gray-700 leading-relaxed">
           Questions? Contact us at{" "}
           <a
-            href="mailto:legal@FitItOn.com"
+            href="mailto:legal@fititon.app"
             className="text-blue-600 underline"
           >
-            legal@FitItOn.com
+            legal@fititon.app
           </a>
           .
         </p>

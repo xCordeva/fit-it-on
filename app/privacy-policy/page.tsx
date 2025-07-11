@@ -42,6 +42,12 @@ export default function PrivacyPolicy() {
             like social networks or service providers.
           </li>
         </ul>
+        <p className="text-gray-700 leading-relaxed mt-4">
+          <strong>Photo Privacy:</strong> Photos uploaded for virtual try-on are
+          only stored to enhance your experience. They are never shared with
+          third parties, not used for training AI, and can be deleted by you at
+          any time from your gallery settings.
+        </p>
       </section>
 
       <section className="mb-6">
@@ -92,9 +98,15 @@ export default function PrivacyPolicy() {
           You have rights regarding your personal data, including access,
           correction, deletion, and objection to processing where applicable.
         </p>
-        <p className="text-gray-700 leading-relaxed">
+        <p className="text-gray-700 leading-relaxed mb-2">
           Depending on your location, you may also have rights under laws such
           as the GDPR (EU/UK/Switzerland) or CCPA (California).
+        </p>
+        <p className="text-gray-700 leading-relaxed">
+          <strong>Account Deletion:</strong> When you delete your account, all
+          associated personal data — including uploaded photos and try-on
+          history — is permanently deleted from our systems. This action is
+          irreversible and the data cannot be recovered.
         </p>
       </section>
 
@@ -112,10 +124,10 @@ export default function PrivacyPolicy() {
         <p className="text-gray-700 leading-relaxed">
           For questions or to exercise your rights, please contact us at{" "}
           <a
-            href="mailto:legal@yourcompany.com"
+            href="mailto:legal@fititon.app"
             className="text-blue-600 underline"
           >
-            legal@yourcompany.com
+            legal@fititon.app
           </a>
           .
         </p>
