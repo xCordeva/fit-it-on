@@ -22,14 +22,23 @@ export default function ContactForm() {
 
   async function onSubmit(data: FormData) {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success("Thank you! Your message has been sent.", {
-        ...TOAST_CONFIG.success,
+      const response = await fetch("https://formspree.io/f/xyzjrvzw", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
-      // For example, send data to your backend here...
 
-      reset();
+      if (response.ok) {
+        toast.success("Thank you! Your message has been sent.", {
+          ...TOAST_CONFIG.success,
+        });
+        reset();
+      } else {
+        throw new Error("Error:", await response.json());
+      }
     } catch (error) {
       toast.success("Oops! Something went wrong. Please try again later.", {
         ...TOAST_CONFIG.error,
