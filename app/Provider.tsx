@@ -71,9 +71,11 @@ export function AuthProvider({
           event === "USER_UPDATED" ||
           event === "INITIAL_SESSION")
       ) {
-        await adjustTrialCountIfAnonymousTrialUsed(currentSession.user.id);
-        const freshData = await fetchFreshUserData(currentSession.user.id);
-        setUserDataState(freshData);
+        setTimeout(async () => {
+          await adjustTrialCountIfAnonymousTrialUsed(currentSession.user.id);
+          const freshData = await fetchFreshUserData(currentSession.user.id);
+          setUserDataState(freshData);
+        }, 500);
       }
     });
 
