@@ -67,7 +67,9 @@ export function AuthProvider({
 
       if (
         currentSession?.user &&
-        (event === "SIGNED_IN" || event === "USER_UPDATED")
+        (event === "SIGNED_IN" ||
+          event === "USER_UPDATED" ||
+          event === "INITIAL_SESSION")
       ) {
         await adjustTrialCountIfAnonymousTrialUsed(currentSession.user.id);
         const freshData = await fetchFreshUserData(currentSession.user.id);
