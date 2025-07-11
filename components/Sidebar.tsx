@@ -100,9 +100,9 @@ export default function Sidebar() {
         )}
 
         {/* Links */}
-        <Button
-          variant="ghost"
-          className={`text-black font-bold rounded-sm border-2 flex items-center overflow-hidden ${
+        <Link
+          href={"/app"}
+          className={`text-black font-bold rounded-sm border-2  overflow-hidden py-2 px-4 gap-2 text-bold flex items-center ${
             isCollapsed ? "justify-center" : "justify-start"
           }
           ${
@@ -112,28 +112,25 @@ export default function Sidebar() {
           }
           `}
         >
-          <Link href={"/app"} className="flex items-center  gap-1">
-            <GiClothes className="h-5 w-5" />
-            {!isCollapsed && <span>Studio</span>}
-          </Link>
-        </Button>
-        <Button
-          variant="ghost"
-          className={`text-black font-bold rounded-sm border-2 flex items-center overflow-hidden ${
+          <GiClothes className="h-5 w-5 flex-shrink-0" />
+          {!isCollapsed && <span>Studio</span>}
+        </Link>
+
+        <Link
+          href={"/gallery"}
+          className={`text-black font-bold rounded-sm border-2  overflow-hidden py-2 px-4 gap-2 text-bold flex items-center ${
             isCollapsed ? "justify-center" : "justify-start"
           }
           ${
-            pathname.startsWith("/gallery")
+            pathname === "/gallery"
               ? "bg-gray-200 border-gray-500 shadow-lg"
               : "hover:bg-gray-200 border-transparent"
           }
           `}
         >
-          <Link href={"/gallery"} className="flex items-center  gap-1">
-            <GrGallery className="h-5 w-5" />
-            {!isCollapsed && <span>Gallery</span>}
-          </Link>
-        </Button>
+          <GrGallery className="h-5 w-5 flex-shrink-0" />
+          {!isCollapsed && <span>Gallery</span>}
+        </Link>
       </div>
 
       {/* Bottom Section */}
