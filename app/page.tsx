@@ -2,18 +2,10 @@
 
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import {
-  Sparkles,
-  Zap,
-  Shield,
-  Users,
-  CheckCircle,
-  Star,
-  Smile,
-  ArrowRight,
-} from "lucide-react";
+import { Sparkles, Zap, Shield, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Footer from "@/components/Footer";
 
 export default function HomePage() {
   return (
@@ -99,6 +91,74 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* Before & After Section*/}
+        <section className="mb-24 text-center relative z-20">
+          <h2 className="text-3xl font-bold mb-6">
+            See the Transformation in Seconds!
+          </h2>
+          <p className="text-gray-600 mb-12 max-w-3xl mx-auto">
+            Experience the magic of virtual try-on: from your photo to a perfect
+            fit — all with just a click and a few seconds.
+          </p>
+          <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-4 lg:gap-8">
+            {/* Input 1: Your Photo */}
+            <div className="flex flex-col items-center">
+              <Image
+                src="/before.webp"
+                alt="Your Photo"
+                width={200}
+                height={200}
+                className="rounded-xl shadow-lg border-2 border-gray-200 object-cover"
+              />
+              <p className="mt-4 text-lg font-semibold text-gray-700">
+                Your Photo
+              </p>
+            </div>
+
+            {/* Transition 1: Plus Garment */}
+            <div className="flex flex-col items-center justify-center text-gray-500 text-center md:text-left">
+              <span className="text-3xl font-bold text-primary mb-2 md:mb-0">
+                +
+              </span>
+              <p className="text-sm font-medium">and</p>
+            </div>
+
+            {/* Input 2: The Garment */}
+            <div className="flex flex-col items-center">
+              <Image
+                src="/garment.webp"
+                alt="Your Garment"
+                width={200}
+                height={200}
+                className="rounded-xl shadow-lg border-2 border-gray-200 object-cover"
+              />
+              <p className="mt-4 text-lg font-semibold text-gray-700">
+                Your Garment
+              </p>
+            </div>
+
+            {/* Transition 2: To Your New Look */}
+            <div className="flex flex-col items-center justify-center text-gray-500 text-center md:text-left">
+              <ArrowRight className="h-12 w-12 text-primary rotate-90 md:rotate-0 mb-4 md:mb-0" />
+              <p className="text-sm font-medium">in seconds!</p>
+            </div>
+
+            {/* Output: Your New Look */}
+            <div className="flex flex-col items-center">
+              <Image
+                src="/after.webp"
+                alt="After Try-On"
+                width={200}
+                height={200}
+                className="rounded-xl shadow-lg border-2 border-primary object-cover"
+              />
+              <p className="mt-4 text-lg font-semibold text-gray-700">
+                Your New Look
+              </p>
+            </div>
+          </div>
+        </section>
+
         {/* Features Section */}
         <section className="mb-24">
           <h2 className="text-3xl font-bold text-center mb-12">
@@ -137,55 +197,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* NEW: Before & After Section */}
-        <section className="mb-24 text-center relative z-20">
-          {" "}
-          {/* Ensure content is above background */}
-          <h2 className="text-3xl font-bold mb-6">
-            See the Transformation in Seconds!
-          </h2>
-          <p className="text-gray-600 mb-12 max-w-2xl mx-auto">
-            Experience the magic of virtual try-on: from your photo to a perfect
-            fit with just a click.
-          </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
-            {/* Before Image */}
-            <div className="flex flex-col items-center">
-              <Image
-                src="/before.png" // Placeholder image
-                alt="Before Try-On"
-                width={300}
-                height={300}
-                className="rounded-xl shadow-lg border-2 border-gray-200 object-cover"
-              />
-              <p className="mt-4 text-lg font-semibold text-gray-700">
-                Your Photo
-              </p>
-            </div>
-
-            {/* Transition Indicator */}
-            <div className="flex flex-col items-center justify-center text-gray-500 text-center md:text-left">
-              <ArrowRight className="h-12 w-12 text-primary rotate-90 md:rotate-0 mb-4 md:mb-0" />
-              <p className="text-sm font-medium">
-                Just a click & a few seconds!
-              </p>
-            </div>
-
-            {/* After Image */}
-            <div className="flex flex-col items-center">
-              <Image
-                src="/after.png" // Placeholder image
-                alt="After Try-On"
-                width={300}
-                height={300}
-                className="rounded-xl shadow-lg border-2 border-primary object-cover"
-              />
-              <p className="mt-4 text-lg font-semibold text-gray-700">
-                Your New Look
-              </p>
-            </div>
-          </div>
-        </section>
         {/* Premium Section */}
         <section className="mb-24 text-center">
           <h2 className="text-3xl font-bold mb-6">
@@ -228,22 +239,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 py-8 text-center text-sm text-gray-600 border-1 border-t-gray-400">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center gap-6 mb-4">
-            <Link href="/privacy-policy" className="hover:underline">
-              Privacy Policy
-            </Link>
-            <Link href="/terms-of-use" className="hover:underline">
-              Terms of Use
-            </Link>
-            <Link href="/contact" className="hover:underline">
-              Contact
-            </Link>
-          </div>
-          <p>&copy; {new Date().getFullYear()} FitItOn. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
