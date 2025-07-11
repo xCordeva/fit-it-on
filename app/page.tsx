@@ -159,6 +159,36 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        <section className="mb-24 text-center">
+          <h2 className="text-3xl font-bold mb-6">How It Works</h2>
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {[
+              {
+                step: "1",
+                title: "Upload Your Photo",
+                desc: "Snap a clear, front-facing image or use one from your gallery.",
+              },
+              {
+                step: "2",
+                title: "Select a Garment",
+                desc: "Choose a clothing item from our store or upload your own.",
+              },
+              {
+                step: "3",
+                title: "See the Result",
+                desc: "In seconds, see how the garment looks on you using AI magic.",
+              },
+            ].map(({ step, title, desc }, i) => (
+              <div key={i} className="text-left p-6 bg-white rounded-xl shadow">
+                <div className="text-2xl font-bold text-primary mb-2">
+                  {step}
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                <p className="text-gray-600">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Features Section */}
         <section className="mb-24">

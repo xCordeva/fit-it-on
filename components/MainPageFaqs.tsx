@@ -48,9 +48,9 @@ export default function MainPageFaqs() {
             Do you store or use my photos after I upload them?
           </AccordionTrigger>
           <AccordionContent>
-            Your uploaded photos are stored temporarily and securely to process
-            your try-on. We never share or use your photos for any other
-            purpose. You can delete them at any time.
+            Your uploaded photos are only stored to enhance your experience.
+            They are never shared with third parties, not used for training AI,
+            and can be deleted by you at any time from your gallery settings.
           </AccordionContent>
         </AccordionItem>
 
