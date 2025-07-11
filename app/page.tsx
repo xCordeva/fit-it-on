@@ -6,6 +6,7 @@ import { Sparkles, Zap, Shield, Users, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import MainPageFaqs from "@/components/MainPageFaqs";
 
 export default function HomePage() {
   return (
@@ -216,7 +217,7 @@ export default function HomePage() {
             <Link href="/pricing">View Premium Plans</Link>
           </Button>
         </section>
-
+        <MainPageFaqs />
         {/* CTA Final Section */}
         <section className="text-center bg-primary text-white p-12 rounded-2xl mb-24">
           <h2 className="text-3xl font-bold mb-4">

@@ -65,27 +65,6 @@ export default function PricingPage() {
 
             <AccordionItem value="faq-3">
               <AccordionTrigger>
-                What image formats are supported?
-              </AccordionTrigger>
-              <AccordionContent>
-                We support JPEG, JPG, and PNG formats. Images should be under
-                10MB for best performance.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="faq-4">
-              <AccordionTrigger>
-                How accurate are the try-on results?
-              </AccordionTrigger>
-              <AccordionContent>
-                Our AI technology provides highly realistic results, especially
-                with clear, well-lit photos. Pro subscribers get access to
-                enhanced processing for even better quality.
-              </AccordionContent>
-            </AccordionItem>
-
-            <AccordionItem value="faq-5">
-              <AccordionTrigger>
                 What happens when I run out of credits?
               </AccordionTrigger>
               <AccordionContent>
@@ -97,7 +76,7 @@ export default function PricingPage() {
               </AccordionContent>
             </AccordionItem>
 
-            <AccordionItem value="faq-6">
+            <AccordionItem value="faq-4">
               <AccordionTrigger>
                 Do unused credits carry over to the next month?
               </AccordionTrigger>
