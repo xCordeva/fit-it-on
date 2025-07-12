@@ -18,7 +18,7 @@ import { useReuseStore } from "@/stores/useReuseStore";
 import { useGalleryStore } from "@/stores/useGalleryStore";
 
 interface TryOnFormProps {
-  onResult: (result: string) => void;
+  onResult: (result: string[]) => void;
 }
 
 export function TryOnForm({ onResult }: TryOnFormProps) {
@@ -86,27 +86,22 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
           "You’ve reached your free trial limit. Create an account to keep trying on outfits!",
           { ...TOAST_CONFIG.error }
         );
-
-        return;
       } else {
         setShowUpgradeModal(true);
         toast.error(
-          "Looks like you’ve used all your free tries. Upgrade to Pro and enjoy unlimited try-ons!",
+          "Looks like you’ve used all your free tries. Upgrade to Pro and enjoy more try-ons!",
           { ...TOAST_CONFIG.error }
         );
-        return;
       }
+      return;
     }
 
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      formData.append("personImage", personImage);
-      formData.append("garmentImage", garmentImage);
-
       let modelImageUrl: string;
       let garmentImageUrl: string;
+
       if (typeof personImage === "string") {
         modelImageUrl = personImage;
       } else {
@@ -117,6 +112,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         );
       }
 
+      // Upload garment image
       if (typeof garmentImage === "string") {
         garmentImageUrl = garmentImage;
       } else {
@@ -127,30 +123,72 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         );
       }
 
-      const response = {
-        ok: true,
-        status: 200,
-        json: async () => ({
-          inputUrl: personImage,
-          garmentUrl: garmentImage,
-          outputUrl: "/result.jpg",
-        }),
-      };
-
-      if (!response.ok) {
-        throw new Error("Failed to process try-on");
-      }
-
-      const apiResult = await response.json();
-
-      // Upload the resulting image to Supabase
-      const result = await uploadImageFromUrlToSupabase(
-        apiResult.outputUrl,
-        "results",
-        user?.id ?? "anon"
+      // Send prediction request
+      const runResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/run`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            model_name: "tryon-v1.6",
+            inputs: {
+              model_image: modelImageUrl,
+              garment_image: garmentImageUrl,
+              num_samples: 1, // this is the number of results variants, max is 4 min is 1 its 1 automatically
+            },
+          }),
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_FASHN_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      // Decrement trial for authenticated users and refetch their gallery
+      if (!runResponse.ok) throw new Error("Failed to start try-on");
+
+      const { id: predictionId } = await runResponse.json();
+
+      // Poll for status
+      let status = "starting";
+      let output: string[] = [];
+
+      while (status !== "completed" && status !== "failed") {
+        const statusResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/status/${predictionId}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${process.env.NEXT_PUBLIC_FASHN_API_KEY}`,
+            },
+          }
+        );
+
+        if (!statusResponse.ok) {
+          throw new Error("Failed to fetch try-on status");
+        }
+
+        const statusData = await statusResponse.json();
+        status = statusData.status;
+
+        if (status === "completed") {
+          output = statusData.output;
+          break;
+        }
+
+        if (status === "failed") {
+          throw new Error("Try-on failed to complete.");
+        }
+
+        // Wait before polling again
+        await new Promise((res) => setTimeout(res, 2500));
+      }
+
+      // Upload result images to Supabase
+      const uploadedResults = await Promise.all(
+        output.map((url) =>
+          uploadImageFromUrlToSupabase(url, "results", user?.id ?? "anon")
+        )
+      );
+
       if (user) {
         await decrementTrial();
         refetchGallery(user.id);
@@ -158,7 +196,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         markAnonymousTrialUsed();
       }
 
-      onResult(result);
+      onResult(uploadedResults);
       toast.success("Your virtual try-on is ready!", {
         ...TOAST_CONFIG.success,
       });
@@ -355,7 +393,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
           )}
         </Button>
         <h3 className="text-gray-400 text-sm mt-2">
-          Processing can take up to 30 seconds.
+          Processing can take up to 60 seconds.
         </h3>
       </div>
     </div>

@@ -6,9 +6,9 @@ import { TryOnResult } from "@/components/TryOnResult";
 import { useModalStore } from "@/stores/useModalStore";
 
 export default function Canvas() {
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<string[] | null>(null);
 
-  const handleResult = (newResult: string) => {
+  const handleResult = (newResult: string[]) => {
     setResult(newResult);
   };
 
