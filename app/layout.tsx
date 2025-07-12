@@ -4,9 +4,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-
 import { AuthProvider } from "./Provider";
 import { getUserData } from "@/lib/getUserData";
+import { PostHogProvider } from "@/components/analytics/PostHog";
+import { Analytics } from "@vercel/analytics/next";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -33,7 +34,8 @@ export default async function RootLayout({
           currentUser={user}
           userData={userData}
         >
-          {children}
+          <Analytics />
+          <PostHogProvider>{children}</PostHogProvider>
           <Toaster />
         </AuthProvider>
       </body>
