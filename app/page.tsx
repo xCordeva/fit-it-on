@@ -1,5 +1,3 @@
-"use client";
-
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Zap, Shield, Users, ArrowRight } from "lucide-react";
