@@ -5,6 +5,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { Session, User } from "@supabase/supabase-js";
 import { adjustTrialCountIfAnonymousTrialUsed } from "@/lib/utils";
 import { fetchFreshUserData } from "@/lib/utils";
+import { useGalleryStore } from "@/stores/useGalleryStore";
 
 interface UserData {
   trial_count: number;
@@ -55,9 +56,9 @@ export function AuthProvider({
   const [userDataState, setUserDataState] = useState<UserData | null>(
     userData ?? null
   );
+  const { refetchGallery } = useGalleryStore();
 
   useEffect(() => {
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
@@ -75,6 +76,7 @@ export function AuthProvider({
           await adjustTrialCountIfAnonymousTrialUsed(currentSession.user.id);
           const freshData = await fetchFreshUserData(currentSession.user.id);
           setUserDataState(freshData);
+          refetchGallery(currentSession.user.id);
         }, 500);
       }
     });
