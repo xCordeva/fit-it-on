@@ -16,43 +16,43 @@ export default function HomePage() {
         <div>
           <img
             src="/clothes/hanger.webp"
-            alt="dress"
-            className="h-20 absolute top-[2%] left-[30%] rotate-[-15deg] opacity-100 z-[-1]"
+            alt="hanger"
+            className="h-20 absolute top-[2%] left-[30%] rotate-[-15deg] z-[-1]"
           />
           <img
             src="/clothes/dress.webp"
             alt="dress"
-            className="h-40 absolute top-[22%] left-[0%] rotate-[-15deg] opacity-100 z-[-1]"
+            className="h-40 absolute top-[22%] left-[4%] rotate-[-15deg] z-[-1]"
           />
           <img
             src="/clothes/hoodie.webp"
             alt="hoodie"
-            className="h-40 absolute top-[20%] left-[90%] rotate-[25deg] opacity-100 z-[-1]"
+            className="h-30 md:h-40 absolute top-[18%] md:top-[20%] left-[62%] md:left-[80%] rotate-[25deg] z-[-1]"
           />
           <img
             src="/clothes/jacket.webp"
             alt="jacket"
-            className="h-40 absolute top-[70%] left-[10%] rotate-[8deg] opacity-100 z-[-1]"
+            className="h-40 absolute top-[73%] md:top-[70%] left-[10%] rotate-[8deg] z-[-1]"
           />
           <img
             src="/clothes/pants.webp"
             alt="pants"
-            className="h-40 absolute top-[60%] left-[75%] rotate-[-22deg] opacity-100 z-[-1]"
+            className="h-40 absolute top-[60%] left-[72%] md:left-[75%] rotate-[-12deg] md:rotate-[-22deg] z-[-1]"
           />
           <img
             src="/clothes/tie.webp"
             alt="tie"
-            className="h-20 absolute top-[44%] left-[95%] rotate-[35deg] opacity-100 z-[-1]"
+            className="h-20 absolute top-[40%] left-[80%] md:left-[82%] rotate-[35deg] z-[-1]"
           />
           <img
             src="/clothes/socks.webp"
-            alt="tie"
-            className="h-20 absolute top-[49%] left-[5%] rotate-[0deg] opacity-100 z-[-1]"
+            alt="socks"
+            className="h-20 absolute top-[46%] md:top-[49%] left-[5%] rotate-[0deg] z-[-1]"
           />
           <img
             src="/clothes/beanie.webp"
-            alt="tie"
-            className="h-20 absolute top-[94%] left-[100%] rotate-[30deg] opacity-100 z-[-1]"
+            alt="beanie"
+            className="h-20 absolute top-[90%] md:top-[85%] left-[70%] md:left-[87%] rotate-[30deg] z-[-1] object-contain"
           />
         </div>
         <section className="grid md:grid-cols-2 gap-12 items-center mb-20">
@@ -82,11 +82,21 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-
-          <div className="flex justify-center md:justify-end">
-            <div className="w-full max-w-md h-96 bg-gray-200 rounded-xl">
-              {/* Placeholder */}
+          <div className="flex flex-col items-center md:items-end ">
+            <div className="flex justify-center md:justify-end w-full">
+              <video
+                src="/hero-vid.mp4"
+                className="w-full max-w-md h-auto bg-gray-200 rounded-xl shadow-lg object-cover"
+                autoPlay
+                muted
+                loop
+                playsInline
+              />
             </div>
+            <p className="text-center text-lg font-semibold text-gray-700 max-w-md px-5">
+              Can you guess which one is{" "}
+              <span className="text-primary">AI</span> and which is real?
+            </p>
           </div>
         </section>
 
@@ -99,7 +109,7 @@ export default function HomePage() {
             Experience the magic of virtual try-on: from your photo to a perfect
             fit — all with just a click and a few seconds.
           </p>
-          <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:gap-4 lg:gap-8">
+          <div className="flex flex-col items-center justify-center gap-6 md:flex-row md:gap-4 lg:gap-8">
             {/* Input 1: Your Photo */}
             <div className="flex flex-col items-center">
               <Image
@@ -109,16 +119,14 @@ export default function HomePage() {
                 height={200}
                 className="rounded-xl shadow-lg border-2 border-gray-200 object-cover"
               />
-              <p className="mt-4 text-lg font-semibold text-gray-700">
+              <p className="mt-2 text-lg font-semibold text-gray-700">
                 Your Photo
               </p>
             </div>
 
             {/* Transition 1: Plus Garment */}
             <div className="flex flex-col items-center justify-center text-gray-500 text-center md:text-left">
-              <span className="text-3xl font-bold text-primary mb-2 md:mb-0">
-                +
-              </span>
+              <span className="text-3xl font-bold text-primary mb-0">+</span>
               <p className="text-sm font-medium">and</p>
             </div>
 
@@ -131,14 +139,14 @@ export default function HomePage() {
                 height={200}
                 className="rounded-xl shadow-lg border-2 border-gray-200 object-cover"
               />
-              <p className="mt-4 text-lg font-semibold text-gray-700">
+              <p className="mt-2 text-lg font-semibold text-gray-700">
                 Your Garment
               </p>
             </div>
 
             {/* Transition 2: To Your New Look */}
             <div className="flex flex-col items-center justify-center text-gray-500 text-center md:text-left">
-              <ArrowRight className="h-12 w-12 text-primary rotate-90 md:rotate-0 mb-4 md:mb-0" />
+              <ArrowRight className="h-12 w-12 text-primary rotate-90 md:rotate-0 mb-0" />
               <p className="text-sm font-medium">in seconds!</p>
             </div>
 
@@ -151,7 +159,7 @@ export default function HomePage() {
                 height={200}
                 className="rounded-xl shadow-lg border-2 border-primary object-cover"
               />
-              <p className="mt-4 text-lg font-semibold text-gray-700">
+              <p className="mt-2 text-lg font-semibold text-gray-700">
                 Your New Look
               </p>
             </div>
@@ -247,7 +255,7 @@ export default function HomePage() {
         </section>
         <MainPageFaqs />
         {/* CTA Final Section */}
-        <section className="text-center bg-primary text-white p-12 rounded-2xl mb-24">
+        <section className="text-center bg-primary text-white p-12 rounded-2xl mb-14">
           <h2 className="text-3xl font-bold mb-4">
             Try Fit It On Today — It’s Free!
           </h2>

@@ -204,7 +204,7 @@ export default function Sidebar() {
         <div
           className={`${
             isCollapsed ? "h-0" : "h-4"
-          } flex items-center justify-center gap-4  transition-h duration-300"`}
+          } flex items-center justify-center gap-4  transition-h duration-300 mb-6`}
         >
           {!isCollapsed && (
             <div className="flex gap-2 flex-col">

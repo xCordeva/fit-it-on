@@ -8,11 +8,16 @@ import { AuthProvider } from "./Provider";
 import { getUserData } from "@/lib/getUserData";
 import { PostHogProvider } from "@/components/analytics/PostHog";
 import { Analytics } from "@vercel/analytics/next";
+import type { Viewport } from "next";
 
 const nunito = Nunito({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#61009E",
+};
 
 export const metadata: Metadata = {
   title: "Fit It On - AI Virtual Try-On",
@@ -43,7 +48,6 @@ export const metadata: Metadata = {
     images: ["https://www.fititon.app/og-image.jpg"],
   },
   metadataBase: new URL("https://www.fititon.app"),
-  themeColor: "#61009E",
 };
 
 export default async function RootLayout({

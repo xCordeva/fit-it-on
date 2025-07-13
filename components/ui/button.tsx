@@ -24,7 +24,8 @@ const buttonVariants = cva(
           border-[2px] border-[var(--primary-orange)] 
           font-extrabold 
           text-[25px] 
-          px-[10px] py-[5px] 
+          py-[5px] 
+          md:px-[10px] 
           rounded-md 
           shadow-[8px_8px_0_black] 
           transition-all 
@@ -37,7 +38,7 @@ const buttonVariants = cva(
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
-        lg: "h-11 rounded-md px-8",
+        lg: "h-11 rounded-md px-4 md:px-8",
         icon: "h-10 w-10",
       },
     },
