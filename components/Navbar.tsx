@@ -48,7 +48,7 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-10">
             <Link
-              href="/app"
+              href="/studio"
               className="text-gray-700 hover:text-primary transition-colors flex gap-1 items-center justify-center "
             >
               <GiClothes className="size-5" />
