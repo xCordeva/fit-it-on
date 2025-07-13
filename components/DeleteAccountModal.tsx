@@ -13,8 +13,9 @@ import { FaExclamationTriangle } from "react-icons/fa";
 interface DeleteAccountModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm: () => void;
-  plan: string | undefined;
+  onConfirm: (url?: string | null) => Promise<void>;
+  plan?: string | undefined;
+  deleteImage?: boolean;
 }
 
 export function DeleteAccountModal({
@@ -22,6 +23,7 @@ export function DeleteAccountModal({
   onOpenChange,
   onConfirm,
   plan,
+  deleteImage = false,
 }: DeleteAccountModalProps) {
   const isPaid = plan !== "Free";
 
@@ -31,15 +33,20 @@ export function DeleteAccountModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-red-600">
             <FaExclamationTriangle className="h-5 w-5" />
-            Confirm Account Deletion
+            {deleteImage ? <>Delete Image ?</> : <>Confirm Account Deletion</>}
           </DialogTitle>
           <DialogDescription>
-            {isPaid ? (
+            {deleteImage ? (
+              <>
+                Are you sure you want to <strong>permanently</strong> delete
+                this image? This action cannot be undone.
+              </>
+            ) : isPaid ? (
               <>
                 You are currently on the <strong>{plan}</strong> plan. Deleting
                 your account will{" "}
-                <strong>permanently remove all remaining credits</strong> and
-                your subscription. This action cannot be undone.
+                <strong>permanently remove your subscription.</strong> This
+                action cannot be undone.
               </>
             ) : (
               <>
@@ -58,14 +65,18 @@ export function DeleteAccountModal({
             }}
             className="w-full bg-red-600 hover:bg-red-700"
           >
-            Yes, I’m sure. Delete my account
+            {deleteImage ? (
+              <>Yes, delete image</>
+            ) : (
+              <>Yes, I’m sure. Delete my account</>
+            )}
           </Button>
           <Button
             variant="ghost"
             className="w-full"
             onClick={() => onOpenChange(false)}
           >
-            No, keep my account
+            {deleteImage ? <>No, cancel</> : <>No, keep my account</>}
           </Button>
         </div>
       </DialogContent>

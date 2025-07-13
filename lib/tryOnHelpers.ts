@@ -59,3 +59,27 @@ export async function uploadImageFromUrlToSupabase(
 
   return urlData.publicUrl;
 }
+
+export async function deleteImageFromSupabase(url: string) {
+  try {
+    const filePath = extractPathFromUrl(url);
+    const { error } = await supabase.storage
+      .from("user-uploads")
+      .remove([filePath]);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+    return true;
+  } catch (err: any) {
+    console.error("Error deleting image:", err.message);
+    return false;
+  }
+}
+
+// This extracts the relative path from the public URL
+function extractPathFromUrl(url: string): string {
+  const parts = url.split("/user-uploads/");
+  console.log(parts[1]);
+  return parts[1] || "";
+}

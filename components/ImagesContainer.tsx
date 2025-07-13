@@ -5,6 +5,12 @@ import { useReuseStore } from "@/stores/useReuseStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ResultsCanvasCard } from "./ResultsCanvasCard";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { deleteImageFromSupabase } from "@/lib/tryOnHelpers";
+import { toast } from "sonner";
+import { useGalleryStore } from "@/stores/useGalleryStore";
+import { TOAST_CONFIG } from "@/lib/utils";
+import { DeleteAccountModal } from "./DeleteAccountModal";
 
 interface ImagesContainerProps {
   user: User | null;
@@ -24,6 +30,21 @@ export default function ImagesContainer({
   const router = useRouter();
   const { setReuseTarget } = useReuseStore();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const { refetchGallery } = useGalleryStore();
+
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState<string | null>(null);
+
+  const handleDeleteImage = async (url?: string | null) => {
+    if (!url) return;
+    const success = await deleteImageFromSupabase(url);
+    if (success && user) {
+      refetchGallery(user.id);
+      toast.success("Image deleted successfully.", { ...TOAST_CONFIG.success });
+    } else {
+      toast.error("Failed to delete image.", { ...TOAST_CONFIG.error });
+    }
+  };
 
   return (
     <main className="flex justify-center p-4 md:py-10 bg-[#f2f2f2] md:bg-white rounded-lg md:shadow-xl w-full h-full mb-16 md:mb-auto overflow-auto">
@@ -74,6 +95,11 @@ export default function ImagesContainer({
                         e.stopPropagation();
                         setActiveIndex(idx);
                       }}
+                      onDeleteClick={(e) => {
+                        e.stopPropagation();
+                        setImageToDelete(url);
+                        setDeleteOpen(true);
+                      }}
                     />
                   ) : (
                     <div
@@ -87,6 +113,23 @@ export default function ImagesContainer({
                         setActiveIndex((prev) => (prev === idx ? null : idx))
                       }
                     >
+                      <div
+                        className={`absolute top-2 right-2 z-10 transition-all duration-300 ${
+                          activeIndex === idx
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0"
+                        }`}
+                      >
+                        <RiDeleteBinLine
+                          className="text-red-500 w-5 h-5  hover:scale-110 transition-transform"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setImageToDelete(url);
+                            setDeleteOpen(true);
+                          }}
+                        />
+                      </div>
+
                       <img
                         src={url}
                         alt={`${folder}-${idx}`}
@@ -121,6 +164,15 @@ export default function ImagesContainer({
           )}
         </div>
       )}
+      <DeleteAccountModal
+        open={deleteOpen}
+        onOpenChange={(open) => {
+          setDeleteOpen(open);
+          if (!open) setImageToDelete(null);
+        }}
+        onConfirm={() => handleDeleteImage(imageToDelete)}
+        deleteImage={true}
+      />
     </main>
   );
 }

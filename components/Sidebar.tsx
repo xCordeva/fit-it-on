@@ -122,7 +122,7 @@ export default function Sidebar() {
             isCollapsed ? "justify-center" : "justify-start"
           }
           ${
-            pathname === "/gallery"
+            pathname.startsWith("/gallery")
               ? "bg-gray-200 border-gray-500 shadow-lg"
               : "hover:bg-gray-200 border-transparent"
           }
