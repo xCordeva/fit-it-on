@@ -8,7 +8,7 @@ import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { TOAST_CONFIG } from "@/lib/utils";
+import { getAnonUserId, TOAST_CONFIG } from "@/lib/utils";
 import { useModalStore } from "@/stores/useModalStore";
 import {
   uploadImageFromUrlToSupabase,
@@ -108,7 +108,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         modelImageUrl = await uploadImageToSupabase(
           personImage,
           "person",
-          user?.id ?? "anon"
+          user?.id ?? `anon/${getAnonUserId()}`
         );
       }
 
@@ -119,7 +119,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         garmentImageUrl = await uploadImageToSupabase(
           garmentImage,
           "garment",
-          user?.id ?? "anon"
+          user?.id ?? `anon/${getAnonUserId()}`
         );
       }
 
@@ -185,7 +185,11 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       // Upload result images to Supabase
       const uploadedResults = await Promise.all(
         output.map((url) =>
-          uploadImageFromUrlToSupabase(url, "results", user?.id ?? "anon")
+          uploadImageFromUrlToSupabase(
+            url,
+            "results",
+            user?.id ?? `anon/${getAnonUserId()}`
+          )
         )
       );
 

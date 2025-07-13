@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { supabase } from "@/lib/supabaseClient";
+import { v4 as uuidv4 } from "uuid";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -67,4 +68,14 @@ export async function fetchFreshUserData(userId: string) {
   }
 
   return data;
+}
+
+export function getAnonUserId() {
+  const key = "anon-user-id";
+  const stored = localStorage.getItem(key);
+  if (stored) return stored;
+
+  const newId = uuidv4();
+  localStorage.setItem(key, newId);
+  return newId;
 }
