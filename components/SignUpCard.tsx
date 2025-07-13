@@ -43,7 +43,7 @@ export default function SignUpCard({ modal = false }: { modal?: boolean }) {
       if (modal) {
         setShowSignInModal(false);
       } else {
-        router.push("/app");
+        router.push("/studio");
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to create account", {

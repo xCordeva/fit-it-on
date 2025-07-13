@@ -42,11 +42,11 @@ export default function BottomNavbar() {
     <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 p-2 z-50">
       <div className="flex justify-around">
         {/* Studio */}
-        <Link href="/app">
+        <Link href="/studio">
           <Button
             variant="ghost"
             className={`text-black ${
-              pathname === "/app" ? "text-primary" : "text-black"
+              pathname === "/studio" ? "text-primary" : "text-black"
             }`}
           >
             <div className="flex flex-col items-center">

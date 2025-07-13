@@ -107,7 +107,7 @@ export default function ImagesContainer({
                           onClick={(e) => {
                             e.stopPropagation();
                             setReuseTarget(url, folder);
-                            router.push("/app");
+                            router.push("/studio");
                           }}
                         >
                           Reuse this image

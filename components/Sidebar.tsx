@@ -101,12 +101,12 @@ export default function Sidebar() {
 
         {/* Links */}
         <Link
-          href={"/app"}
+          href={"/studio"}
           className={`text-black font-bold rounded-sm border-2  overflow-hidden py-2 px-4 gap-2 text-bold flex items-center ${
             isCollapsed ? "justify-center" : "justify-start"
           }
           ${
-            pathname === "/app"
+            pathname === "/studio"
               ? "bg-gray-200 border-gray-500 shadow-lg"
               : "hover:bg-gray-200 border-transparent"
           }

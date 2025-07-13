@@ -106,7 +106,7 @@ export function AuthProvider({
       setLoading(true);
       const res = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${window.location.origin}/app` },
+        options: { redirectTo: `${window.location.origin}/studio` },
       });
       setLoading(false);
       return res;
@@ -116,7 +116,7 @@ export function AuthProvider({
       setLoading(true);
       const res = await supabase.auth.signInWithOAuth({
         provider: "facebook",
-        options: { redirectTo: `${window.location.origin}/app` },
+        options: { redirectTo: `${window.location.origin}/studio` },
       });
       setLoading(false);
       return res;
