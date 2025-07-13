@@ -61,7 +61,7 @@ export default function Gallery({
             />
           </div>
         ) : showFolders ? (
-          <div className="flex gap-6 justify-center flex-wrap">
+          <div className="flex gap-6 justify-center flex-wrap pb-10 md:pb-0">
             {hasValidImages(person) && (
               <FolderCard
                 title="Person"

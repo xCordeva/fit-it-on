@@ -39,7 +39,7 @@ export default function BottomNavbar() {
   };
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 p-2 z-50">
+    <div className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 p-2 z-50 h-[60px]">
       <div className="flex justify-around">
         {/* Studio */}
         <Link href="/studio">
@@ -94,8 +94,8 @@ export default function BottomNavbar() {
                   {user.user_metadata.avatar_url ? (
                     <Image
                       src={user.user_metadata.avatar_url}
-                      height={30}
-                      width={30}
+                      height={24}
+                      width={24}
                       className="rounded-full"
                       alt="user-image"
                     />

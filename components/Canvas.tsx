@@ -24,6 +24,7 @@ export default function Canvas() {
   pb-12 md:pb-0 
   flex justify-center 
   p-4 md:py-10 overflow-auto
+
 `}
     >
       {!result ? (
