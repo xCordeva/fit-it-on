@@ -73,7 +73,7 @@ export default function HomePage() {
               you.
             </p>
 
-            <div className="flex flex-col items-start gap-2 mb-2">
+            <div className="flex flex-col items-center md:items-start gap-2 mb-2">
               <Button variant="cool" asChild size="lg">
                 <Link href="/app">Get Started Now</Link>
               </Button>

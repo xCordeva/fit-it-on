@@ -53,7 +53,7 @@ export default function ContactForm() {
         alt="fit-it-on-logo"
         className="w-auto h-12 mx-auto"
       />
-      <div className="border-2 max-w-lg mx-auto p-6 bg-white rounded-md shadow-lg mt-12">
+      <div className="md:border-2 max-w-lg mx-auto p-6 bg-white rounded-md md:shadow-lg mt-4 md:mt-12">
         <h1 className="text-3xl font-bold mb-4 text-center">Contact Us</h1>
         <p className="mb-6 text-center text-gray-600">
           Have a problem? Something went wrong? Or a suggestion to improve our

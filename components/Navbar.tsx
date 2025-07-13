@@ -166,20 +166,9 @@ export function Navbar() {
             >
               Pricing
             </Link>
-            <Link
-              href="/pricing"
-              className="text-gray-700 hover:text-primary transition-colors "
-            >
-              FAQs
-            </Link>
 
             {user ? (
               <>
-                {remainingTrials !== Infinity && (
-                  <div className="text-sm text-gray-600 py-2">
-                    {remainingTrials} tries left
-                  </div>
-                )}
                 <Link
                   href="/account"
                   className="block text-gray-700 hover:text-primary transition-colors"
@@ -187,6 +176,11 @@ export function Navbar() {
                 >
                   Account
                 </Link>
+                {remainingTrials !== Infinity && (
+                  <div className="text-sm text-gray-600 py-2">
+                    {remainingTrials} tries left
+                  </div>
+                )}
                 <Button
                   variant="ghost"
                   className="w-full justify-start gap-2"
