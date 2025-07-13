@@ -20,6 +20,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useTrials } from "@/hooks/useTrials";
@@ -105,133 +106,67 @@ export default function BottomNavbar() {
                 </div>
               </Button>
             </DropdownMenuTrigger>
+
             <DropdownMenuContent align="end">
               {/* Profile */}
-              <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                <Link
-                  href={"/account"}
-                  className="flex items-center justify-center gap-2"
-                >
-                  <DropdownMenuContent align="end">
-                    {/* Profile */}
-                    <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                      <Link href={"/account"}>
-                        <HiOutlineUser className="h-5 w-5 pr-1 flex-shrink-0" />
-                        <span>{user.user_metadata.name}</span>
-                      </Link>
-                    </DropdownMenuItem>
-
-                    {/* Plan */}
-                    <DropdownMenuItem asChild className="gap-2 cursor-pointer">
-                      <div>
-                        {userData?.plan === "free" ? (
-                          <LuBadgeInfo className="h-5 w-5 pr-1 flex-shrink-0" />
-                        ) : (
-                          <HiOutlineBadgeCheck className="h-5 w-5 pr-1 flex-shrink-0" />
-                        )}
-                        <div className="flex flex-col">
-                          <span>Current Plan</span>
-                          <span className="text-gray-500 capitalize">
-                            {userData?.plan}
-                          </span>
-                        </div>
-                      </div>
-                    </DropdownMenuItem>
-
-                    {/* Trials */}
-                    {userData && (
-                      <DropdownMenuItem
-                        asChild
-                        className="gap-2 cursor-pointer"
-                      >
-                        <div>
-                          <HiOutlineClipboardCheck className="h-5 w-5 pr-1 flex-shrink-0" />
-                          <span className="text-gray-500">
-                            {remainingTrials} tries left
-                          </span>
-                        </div>
-                      </DropdownMenuItem>
-                    )}
-
-                    {/* Separator */}
-                    <hr className="my-2 border-t border-gray-200" />
-
-                    {/* Privacy Policy & Terms of use */}
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <div className="flex justify-between gap-1">
-                        <Link
-                          href="/privacy-policy"
-                          target="_blank"
-                          className="text-xs"
-                        >
-                          Privacy Policy
-                        </Link>
-                        <Link
-                          href="/terms-of-use"
-                          target="_blank"
-                          className="text-xs"
-                        >
-                          Terms of Use
-                        </Link>
-                      </div>
-                    </DropdownMenuItem>
-
-                    {/* Separator */}
-                    <hr className="my-2 border-t border-gray-200" />
-
-                    {/* Contact Support */}
-                    <DropdownMenuItem asChild className="cursor-pointer">
-                      <Link href="/contact" target="_blank" className="text-xs">
-                        Having trouble? Contact us
-                      </Link>
-                    </DropdownMenuItem>
-
-                    {/* Separator */}
-                    <hr className="my-2 border-t border-gray-200" />
-
-                    {/* Sign Out */}
-                    <DropdownMenuItem
-                      onClick={handleSignOut}
-                      className="gap-2 cursor-pointer"
-                    >
-                      <HiOutlineLogout className="h-4 w-4" />
-                      <span>Sign Out</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-
+              <DropdownMenuItem asChild>
+                <Link href="/account" className="flex items-center gap-2">
                   <HiOutlineUser className="h-4 w-4" />
                   <span>{user.user_metadata.name}</span>
                 </Link>
               </DropdownMenuItem>
 
-              {/* Plan */}
-              <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+              {/* Plan Info */}
+              <DropdownMenuItem>
                 <div className="flex items-center gap-2">
                   {userData?.plan === "free" ? (
-                    <LuBadgeInfo />
+                    <LuBadgeInfo className="h-4 w-4" />
                   ) : (
                     <HiOutlineBadgeCheck className="h-4 w-4" />
                   )}
-                  <div className="flex flex-col">
-                    <span>Current Plan</span>
-                    <span className="text-gray-500">{userData?.plan}</span>
+                  <div>
+                    <p>Current Plan</p>
+                    <p className="text-gray-500 text-xs">{userData?.plan}</p>
                   </div>
                 </div>
               </DropdownMenuItem>
 
               {/* Trials */}
               {userData && (
-                <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+                <DropdownMenuItem>
                   <div className="flex items-center gap-2">
                     <HiOutlineClipboardCheck className="h-4 w-4" />
-                    <span className="text-gray-500">
+                    <span className="text-gray-500 text-xs">
                       {remainingTrials} tries left
                     </span>
                   </div>
                 </DropdownMenuItem>
               )}
 
-              {/* Sign Out */}
+              {/* Links */}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/privacy-policy"
+                  target="_blank"
+                  className="text-xs"
+                >
+                  Privacy Policy
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/terms-of-use" target="_blank" className="text-xs">
+                  Terms of Use
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/contact" target="_blank" className="text-xs">
+                  Having trouble? Contact us
+                </Link>
+              </DropdownMenuItem>
+
+              {/* Sign out */}
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={handleSignOut}
                 className="gap-2 cursor-pointer"
