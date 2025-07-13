@@ -150,15 +150,15 @@ export function Navbar() {
             >
               Studio
             </Link>
-            {user && (
-              <Link
-                href="/gallery"
-                className="block text-gray-700 hover:text-primary transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Gallery
-              </Link>
-            )}
+
+            <Link
+              href="/gallery"
+              className="block text-gray-700 hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Gallery
+            </Link>
+
             <Link
               href="/pricing"
               className="block text-gray-700 hover:text-primary transition-colors"
