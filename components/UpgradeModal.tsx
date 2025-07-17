@@ -33,7 +33,9 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
     try {
       window.location.href = selectedPlan.checkoutUrl;
     } catch (err) {
-      toast.error("Failed to start checkout. Please try again.", {...TOAST_CONFIG.error});
+      toast.error("Failed to start checkout. Please try again.", {
+        ...TOAST_CONFIG.error,
+      });
     } finally {
       setLoading(false);
     }
@@ -120,7 +122,7 @@ export function UpgradeModal({ open, onOpenChange }: UpgradeModalProps) {
         </div>
 
         <div className="text-center text-xs text-gray-500">
-          Payments securely handled via Stripe.
+          Payments securely handled via Lemon Squeezy.
         </div>
       </DialogContent>
     </Dialog>
