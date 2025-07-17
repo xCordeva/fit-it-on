@@ -27,7 +27,7 @@ export async function adjustTrialCountIfAnonymousTrialUsed(userId: string) {
   if (anonTrials === 0) {
     const { data, error } = await supabase
       .from("users")
-      .select("upgraded_from_anonymous")
+      .select("upgraded_from_anonymous, trial_count")
       .eq("id", userId)
       .single();
 
@@ -36,7 +36,7 @@ export async function adjustTrialCountIfAnonymousTrialUsed(userId: string) {
       return;
     }
 
-    if (data?.upgraded_from_anonymous) {
+    if (data?.upgraded_from_anonymous || data?.trial_count > 3) {
       return;
     }
 
