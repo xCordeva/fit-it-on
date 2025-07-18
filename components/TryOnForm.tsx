@@ -175,7 +175,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         }
 
         if (status === "failed") {
-          throw new Error("Try-on failed to complete.");
+          throw new Error(statusData.error.message);
         }
 
         // Wait before polling again
@@ -205,10 +205,12 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         ...TOAST_CONFIG.success,
       });
     } catch (error) {
-      console.error("Try-on error:", error);
-      toast.error("Failed to process try-on. Please try again.", {
-        ...TOAST_CONFIG.error,
-      });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to process try-on. Please try again.",
+        { ...TOAST_CONFIG.error }
+      );
     } finally {
       setLoading(false);
     }
