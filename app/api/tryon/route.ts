@@ -1,139 +1,39 @@
 import { v4 as uuidv4 } from "uuid";
-import { NextRequest, NextResponse } from "next/server";
-import busboy from "busboy";
-import { Readable } from "stream";
-import { supabase } from "@/lib/supabaseClient";
+import { NextResponse } from "next/server";
+import {
+  uploadBufferToSupabase,
+  uploadImageFromUrlToSupabase,
+} from "@/lib/tryOnHelpers";
 
-const uploadBufferToSupabase = async (
-  fileBuffer: Buffer,
-  fileName: string,
-  mimeType: string
-): Promise<string> => {
-  const { data, error } = await supabase.storage
-    .from("user-uploads")
-    .upload(fileName, fileBuffer, {
-      contentType: mimeType,
-      cacheControl: "3600",
-      upsert: false,
-    });
-
-  if (error) {
-    throw new Error(`Upload failed: ${error.message}`);
-  }
-
-  const { data: publicUrlData } = supabase.storage
-    .from("user-uploads")
-    .getPublicUrl(fileName);
-
-  return publicUrlData.publicUrl;
-};
-
-const uploadImageFromUrlToSupabase = async (
-  imageUrl: string,
-  fileType: string,
-  userId: string
-): Promise<string> => {
-  const response: Response = await fetch(imageUrl);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch image from URL: ${response.statusText}`);
-  }
-
-  const blob: Blob = await response.blob();
-  const filePath: string = `users/${userId}/${fileType}/result-${Date.now()}.jpg`;
-
-  const { data, error } = await supabase.storage
-    .from("user-uploads")
-    .upload(filePath, blob, {
-      contentType: blob.type,
-      upsert: false,
-    });
-
-  if (error) {
-    throw new Error(`Upload failed: ${error.message}`);
-  }
-
-  const { data: urlData } = supabase.storage
-    .from("user-uploads")
-    .getPublicUrl(filePath);
-
-  return urlData.publicUrl;
-};
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-export default async function POST(req: NextRequest) {
-  const formData = await new Promise<{
-    userId: string;
-    garmentImageUrl: string;
-    personImage: { filename: string; buffer: Buffer; mimetype: string };
-  }>((resolve, reject) => {
-    const bb = busboy({ headers: req.headers });
-    let personImageBuffer: Buffer;
-    let personImageFilename: string;
-    let personImageMimeType: string;
-    let garmentImageUrl: string;
-    let userId: string;
-
-    bb.on("file", (name: string, file: Readable, info: busboy.FileInfo) => {
-      const { filename, mimeType } = info;
-      if (name === "personImage") {
-        personImageFilename = filename;
-        personImageMimeType = mimeType;
-        const chunks: Buffer[] = [];
-        file.on("data", (chunk: Buffer) => chunks.push(chunk));
-        file.on("end", () => {
-          personImageBuffer = Buffer.concat(chunks);
-        });
-      }
-    });
-
-    bb.on("field", (name: string, value: string) => {
-      if (name === "garmentImageUrl") {
-        garmentImageUrl = value;
-      }
-      if (name === "userId") {
-        userId = value;
-      }
-    });
-
-    bb.on("close", () => {
-      if (!personImageBuffer || !garmentImageUrl) {
-        reject(new Error("Missing form fields"));
-      }
-      resolve({
-        userId,
-        garmentImageUrl,
-        personImage: {
-          filename: personImageFilename,
-          buffer: personImageBuffer,
-          mimetype: personImageMimeType,
-        },
-      });
-    });
-
-    bb.on("error", (err: Error) => reject(err));
-
-    (req as unknown as Readable).pipe(bb);
-  });
-
-  const { personImage, garmentImageUrl, userId } = formData;
-  const userIdentifier: string = userId || `anon/${uuidv4()}`;
-
+export async function POST(req: any) {
+  // Use native request.formData() to handle multipart form data
   try {
-    // --- 1. UPLOAD IMAGES TO SUPABASE ---
-    const modelImageUrl: string = await uploadBufferToSupabase(
-      personImage.buffer,
-      `users/${userIdentifier}/person/${uuidv4()}-${personImage.filename}`,
-      personImage.mimetype
+    const formData = await req.formData();
+    const personImageFile = formData.get("personImage");
+    const garmentImageUrl = formData.get("garmentImageUrl");
+    const userId = formData.get("userId");
+
+    // Ensure all required fields are present
+    if (!personImageFile || !garmentImageUrl) {
+      return NextResponse.json(
+        { error: "Missing personImage or garmentImageUrl" },
+        { status: 400 }
+      );
+    }
+
+    const userIdentifier = userId || `anon/${uuidv4()}`;
+
+    // Convert the File object to a Buffer
+    const personImageBuffer = Buffer.from(await personImageFile.arrayBuffer());
+    const modelImageUrl = await uploadBufferToSupabase(
+      personImageBuffer,
+      `users/${userIdentifier}/person/${uuidv4()}-${personImageFile.name}`,
+      personImageFile.type
     );
 
     // --- 2. SEND PREDICTION REQUEST TO FASHN API ---
-    const runResponse: Response = await fetch(
-      `${process.env.FASHN_BASE_URL}/run`,
+    const runResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/run`,
       {
         method: "POST",
         body: JSON.stringify({
@@ -145,45 +45,41 @@ export default async function POST(req: NextRequest) {
           },
         }),
         headers: {
-          Authorization: `Bearer ${process.env.FASHN_API_KEY}`,
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_FASHN_API_KEY}`,
           "Content-Type": "application/json",
         },
       }
     );
 
     if (!runResponse.ok) {
-      const errorText: string = await runResponse.text();
+      const errorText = await runResponse.text();
       console.error("FASHN API start error:", errorText);
       throw new Error("Failed to start try-on process with FASHN API");
     }
 
-    const { id: predictionId }: { id: string } = await runResponse.json();
+    const { id: predictionId } = await runResponse.json();
 
     // --- 3. POLL FASHN API FOR RESULT ---
-    let status: string = "starting";
-    let output: string[] = [];
-    const pollingStartTime: number = Date.now();
-    const pollingTimeout: number = 60000;
+    let status = "starting";
+    let output = [];
+    const pollingStartTime = Date.now();
+    const pollingTimeout = 60000;
 
     while (status !== "completed" && status !== "failed") {
       if (Date.now() - pollingStartTime > pollingTimeout) {
         throw new Error("FASHN API polling timed out");
       }
-      const statusResponse: Response = await fetch(
+      const statusResponse = await fetch(
         `${process.env.FASHN_BASE_URL}/status/${predictionId}`,
         {
           headers: { Authorization: `Bearer ${process.env.FASHN_API_KEY}` },
         }
       );
       if (!statusResponse.ok) throw new Error("Failed to fetch try-on status");
-      const statusData: {
-        status: string;
-        output?: string[];
-        error?: { message: string };
-      } = await statusResponse.json();
+      const statusData = await statusResponse.json();
       status = statusData.status;
       if (status === "completed") {
-        output = statusData.output as string[];
+        output = statusData.output;
         break;
       }
       if (status === "failed") {
@@ -202,7 +98,7 @@ export default async function POST(req: NextRequest) {
     // --- 5. DECREMENT TRIAL COUNT ---
     // If the user is authenticated (not anonymous), call the decrement API.
     if (!userIdentifier.startsWith("anon/")) {
-      await fetch(`https://www.fititon.app/api/decrement-trial`, {
+      await fetch(`${req.headers.origin}/api/decrement-trial`, {
         method: "POST",
         credentials: "include", // Pass cookies to authenticate the user
       });
@@ -216,9 +112,7 @@ export default async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Server error during try-on:", err);
     return NextResponse.json(
-      {
-        error: err instanceof Error ? err.message : "Server error",
-      },
+      { error: err instanceof Error ? err.message : "Server error" },
       { status: 500 }
     );
   }

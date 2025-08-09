@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",
+    "@types/busboy": "^1.5.4",
     "tsx": "^4.20.3"
   }
 }
