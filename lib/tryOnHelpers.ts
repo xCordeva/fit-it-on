@@ -60,6 +60,30 @@ export async function uploadImageFromUrlToSupabase(
   return urlData.publicUrl;
 }
 
+export async function uploadBufferToSupabase(
+  fileBuffer: Buffer,
+  fileName: string,
+  mimeType: string
+) {
+  const { data, error } = await supabase.storage
+    .from("user-uploads")
+    .upload(fileName, fileBuffer, {
+      contentType: mimeType,
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (error) {
+    throw new Error(`Upload failed: ${error.message}`);
+  }
+
+  const { data: publicUrlData } = supabase.storage
+    .from("user-uploads")
+    .getPublicUrl(fileName);
+
+  return publicUrlData.publicUrl;
+}
+
 export async function deleteImageFromSupabase(url: string) {
   try {
     const filePath = extractPathFromUrl(url);
