@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { NextResponse } from "next/server";
 import {
   uploadBufferToSupabase,
@@ -21,13 +20,17 @@ export async function POST(req: any) {
       );
     }
 
-    const userIdentifier = userId || `anon/${uuidv4()}`;
-
     // Convert the File object to a Buffer
     const personImageBuffer = Buffer.from(await personImageFile.arrayBuffer());
+
+    // Construct path for person image
+    const personImageFilePath = `users/${userId}/person/${Date.now()}-${
+      personImageFile.name
+    }`;
+
     const modelImageUrl = await uploadBufferToSupabase(
       personImageBuffer,
-      `users/${userIdentifier}/person/${uuidv4()}-${personImageFile.name}`,
+      personImageFilePath,
       personImageFile.type
     );
 
@@ -91,13 +94,12 @@ export async function POST(req: any) {
     // --- 4. UPLOAD RESULT IMAGES TO SUPABASE ---
     const uploadedResults: string[] = await Promise.all(
       output.map((url: string) =>
-        uploadImageFromUrlToSupabase(url, "results", userIdentifier)
+        uploadImageFromUrlToSupabase(url, "results", userId)
       )
     );
 
     // --- 5. DECREMENT TRIAL COUNT ---
-    // If the user is authenticated (not anonymous), call the decrement API.
-    if (!userIdentifier.startsWith("anon/")) {
+    if (!userId.startsWith("anon/")) {
       await fetch(`${req.headers.origin}/api/decrement-trial`, {
         method: "POST",
         credentials: "include", // Pass cookies to authenticate the user
