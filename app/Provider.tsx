@@ -114,9 +114,15 @@ export function AuthProvider({
 
     signInWithFacebook: async () => {
       setLoading(true);
+      const params = new URLSearchParams(window.location.search);
+      const isFromExtension = params.get("source") === "extension";
+      const redirectTo = isFromExtension
+        ? `${window.location.origin}/auth-success`
+        : `${window.location.origin}/studio`;
+
       const res = await supabase.auth.signInWithOAuth({
-        provider: "facebook",
-        options: { redirectTo: `${window.location.origin}/studio` },
+        provider: "google",
+        options: { redirectTo },
       });
       setLoading(false);
       return res;

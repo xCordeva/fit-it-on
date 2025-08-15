@@ -36,10 +36,14 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
       toast.success("Login successful, welcome back!", {
         ...TOAST_CONFIG.success,
       });
+
+      const params = new URLSearchParams(window.location.search);
+      const isFromExtension = params.get("source") === "extension";
+
       if (modal) {
         setShowSignInModal(false);
       } else {
-        router.push("/studio");
+        router.push(isFromExtension ? "/auth-success" : "/studio");
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to sign in", {
