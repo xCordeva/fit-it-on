@@ -75,7 +75,7 @@ export default function HomePage() {
 
             <div className="flex flex-col items-center md:items-start gap-2 mb-2">
               <Button variant="cool" asChild size="lg">
-                <Link href="/studio">Get Started Now</Link>
+                <Link href="/studio">Get Started for Free</Link>
               </Button>
               <p className="text-xs text-gray-500">
                 Try it for free — no sign up required
@@ -269,7 +269,7 @@ export default function HomePage() {
             className="bg-white hover:bg-white"
           >
             <Link href="/studio" className="text-black border-black">
-              Get Started
+              Get Started for Free
             </Link>
           </Button>
         </section>

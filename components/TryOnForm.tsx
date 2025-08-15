@@ -83,7 +83,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       if (!user) {
         setShowSignInModal(true);
         toast.error(
-          "You’ve reached your free trial limit. Create an account to keep trying on outfits!",
+          "You’ve reached the limit for non-signed-up users. Create an account and get 2 more free tries to keep trying on outfits!",
           { ...TOAST_CONFIG.error }
         );
       } else {
