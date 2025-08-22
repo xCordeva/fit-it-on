@@ -7,6 +7,7 @@ import { FaArrowRotateLeft } from "react-icons/fa6";
 import { BsInfoCircleFill } from "react-icons/bs";
 import { useCanvasImageDrawer } from "@/hooks/useCanvasImageDrawer";
 import { DownloadButton } from "./DownloadButton";
+import { useModalStore } from "@/stores/useModalStore";
 
 interface TryOnResultProps {
   result: string[];
@@ -20,7 +21,7 @@ export function TryOnResult({ result, onReset }: TryOnResultProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const thumbnailRefs = useRef<(HTMLCanvasElement | null)[]>([]);
-
+  const { setShowUploadGuideModal } = useModalStore();
   // Draw main result image
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -97,6 +98,22 @@ export function TryOnResult({ result, onReset }: TryOnResultProps) {
           <FaArrowRotateLeft className="mr-2 h-4 w-4" />
           Try Another
         </Button>
+      </div>
+
+      {/* Quality Notice */}
+      <div className="text-center text-sm bg-yellow-100 text-yellow-800 p-2 rounded-lg w-fit mx-auto ">
+        <p className="flex items-center justify-center gap-1">
+          <BsInfoCircleFill className="h-3 w-3 flex-shrink-0" />
+          Don't like the results? Check our upload guide to get the best results
+        </p>
+        <div className="text-center">
+          <button
+            className="text-yellow-900 underline cursor-pointer"
+            onClick={() => setShowUploadGuideModal(true)}
+          >
+            Upload guide
+          </button>
+        </div>
       </div>
 
       {/* Quality Notice */}
