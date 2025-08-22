@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TryOnForm } from "@/components/TryOnForm";
 import { TryOnResult } from "@/components/TryOnResult";
 import { useModalStore } from "@/stores/useModalStore";
+import { BsInfoCircleFill } from "react-icons/bs";
 
 export default function Canvas() {
   const [result, setResult] = useState<string[] | null>(null);
@@ -32,15 +33,20 @@ export default function Canvas() {
           {/* Try-On Form */}
           <div className="w-full max-w-4xl mx-auto">
             <TryOnForm onResult={handleResult} />
-            <div className="text-center mt-2 md:mt-6">
-              <h2
-                className="text-gray-500 underline cursor-pointer inline"
-                onClick={() => {
-                  setShowUploadGuideModal(true);
-                }}
-              >
-                Upload guide
-              </h2>
+            {/* Quality Notice */}
+            <div className="text-center text-sm bg-yellow-100 text-yellow-800 p-2 rounded-lg w-fit mx-auto mt-6">
+              <p className="flex items-center justify-center gap-1">
+                <BsInfoCircleFill className="h-3 w-3 flex-shrink-0" />
+                To get the best results, check our upload guide.
+              </p>
+              <div className="text-center">
+                <button
+                  className="text-yellow-900 underline cursor-pointer"
+                  onClick={() => setShowUploadGuideModal(true)}
+                >
+                  Upload guide
+                </button>
+              </div>
             </div>
           </div>
         </>
