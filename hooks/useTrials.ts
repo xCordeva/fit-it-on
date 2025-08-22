@@ -3,20 +3,10 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "../app/Provider";
-import { useTrialsStore } from "@/stores/useTrialsStore";
 
 export function useTrials() {
   const { user, userData, setUserData } = useAuth();
   const [loading, setLoading] = useState(false);
-  const { anonTrials, setAnonTrials, _hasHydrated } = useTrialsStore();
-
-  useEffect(() => {
-    if (!user) {
-      if (_hasHydrated && anonTrials === undefined) {
-        setAnonTrials(1);
-      }
-    }
-  }, [user, _hasHydrated, anonTrials, setAnonTrials]);
 
   useEffect(() => {
     if (user) {
@@ -62,26 +52,14 @@ export function useTrials() {
 
   const canTryOn = () => {
     if (user) {
-      // Pro plan always allowed
-      if (userData?.plan === "pro") return true;
-      // Free plan must have trials left
       return (userData?.trial_count ?? 0) > 0;
-    } else {
-      return _hasHydrated ? anonTrials && anonTrials > 0 : true;
     }
   };
 
   const getRemainingTrials = () => {
     if (user) {
-      if (userData?.plan === "pro") return Infinity;
       return userData?.trial_count ?? 0;
-    } else {
-      return _hasHydrated ? anonTrials : undefined;
     }
-  };
-
-  const markAnonymousTrialUsed = () => {
-    setAnonTrials(0);
   };
 
   return {
@@ -90,7 +68,6 @@ export function useTrials() {
     canTryOn: canTryOn(),
     remainingTrials: getRemainingTrials(),
     decrementTrial,
-    markAnonymousTrialUsed,
     refetch: fetchUserData,
   };
 }

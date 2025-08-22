@@ -46,9 +46,8 @@ export default function PricingPage() {
             <AccordionItem value="faq-1">
               <AccordionTrigger>How does the free trial work?</AccordionTrigger>
               <AccordionContent>
-                You get 1 free try without signing up, then 2 additional tries
-                when you create an account. No credit card required for the free
-                tier.
+                You get 3 free trials when you create an account. No credit card
+                required for the free tier.
               </AccordionContent>
             </AccordionItem>
 

@@ -78,7 +78,7 @@ export default function HomePage() {
                 <Link href="/studio">Get Started for Free</Link>
               </Button>
               <p className="text-xs text-gray-500">
-                Try it for free — no sign up required
+                Try it for free — no credit card required
               </p>
             </div>
           </div>

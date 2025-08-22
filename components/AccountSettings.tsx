@@ -11,7 +11,6 @@ import { TOAST_CONFIG } from "@/lib/utils";
 import { useAuth } from "@/app/Provider";
 import { useModalStore } from "@/stores/useModalStore";
 import { UpgradeModal } from "./UpgradeModal";
-import { useTrialsStore } from "@/stores/useTrialsStore";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
@@ -30,13 +29,11 @@ export default function AccountSettings({
     (p) => p.name.toLowerCase() === userData?.plan?.toLowerCase()
   );
   const { showUpgradeModal, setShowUpgradeModal } = useModalStore();
-  const { setAnonTrials } = useTrialsStore();
   const { signOut, setUserData } = useAuth();
   const handleDeleteAccount = async () => {
     const res = await fetch("/api/account/delete", { method: "POST" });
     await signOut();
     setUserData(null);
-    setAnonTrials(0);
     if (res.ok) {
       toast.success("Your account has been deleted successfully.", {
         ...TOAST_CONFIG.success,

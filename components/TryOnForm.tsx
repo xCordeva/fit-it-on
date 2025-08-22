@@ -8,7 +8,7 @@ import { useAuth } from "../app/Provider";
 import { useTrials } from "@/hooks/useTrials";
 import { toast } from "sonner";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { getAnonUserId, TOAST_CONFIG } from "@/lib/utils";
+import { TOAST_CONFIG } from "@/lib/utils";
 import { useModalStore } from "@/stores/useModalStore";
 import {
   uploadImageFromUrlToSupabase,
@@ -34,7 +34,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
   const personInputRef = useRef<HTMLInputElement>(null);
   const garmentInputRef = useRef<HTMLInputElement>(null);
 
-  const { canTryOn, decrementTrial, markAnonymousTrialUsed } = useTrials();
+  const { canTryOn, decrementTrial } = useTrials();
   const { user } = useAuth();
   const { imageUrl, target, clearReuse } = useReuseStore();
 
@@ -48,10 +48,20 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
       clearReuse();
     }
   }, [imageUrl, target, clearReuse]);
+
   const { person, garment } = useGalleryStore();
   const showChooseFromGalleryButton = !!(person?.length || garment?.length);
   const { refetchGallery } = useGalleryStore();
+
   const handleImageUpload = (file: File, type: "person" | "garment") => {
+    if (!user) {
+      setShowSignInModal(true);
+      toast.error(
+        "This feature is for signed-in users only. Sign in now and enjoy 3 free trials!",
+        { ...TOAST_CONFIG.error }
+      );
+      return;
+    }
     if (!file.type.startsWith("image/")) {
       toast.error("Please upload a valid image file", {
         ...TOAST_CONFIG.error,
@@ -74,25 +84,24 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
   };
 
   const handleSubmit = async () => {
+    if (!user) {
+      setShowSignInModal(true);
+      toast.error("Sign in to try on clothes!", { ...TOAST_CONFIG.error });
+      setLoading(false);
+      return;
+    }
+
     if (!personImage || !garmentImage) {
       toast.error("Please upload both images", { ...TOAST_CONFIG.error });
       return;
     }
 
     if (!canTryOn) {
-      if (!user) {
-        setShowSignInModal(true);
-        toast.error(
-          "You’ve reached the limit for non-signed-up users. Create an account and get 2 more free tries to keep trying on outfits!",
-          { ...TOAST_CONFIG.error }
-        );
-      } else {
-        setShowUpgradeModal(true);
-        toast.error(
-          "Looks like you’ve used all your free tries. Upgrade to Pro and enjoy more try-ons!",
-          { ...TOAST_CONFIG.error }
-        );
-      }
+      setShowUpgradeModal(true);
+      toast.error(
+        "Looks like you’ve used all your free tries. Upgrade to Pro and enjoy more try-ons!",
+        { ...TOAST_CONFIG.error }
+      );
       return;
     }
 
@@ -108,7 +117,7 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         modelImageUrl = await uploadImageToSupabase(
           personImage,
           "person",
-          user?.id ?? `anon/${getAnonUserId()}`
+          user!.id
         );
       }
 
@@ -119,85 +128,90 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
         garmentImageUrl = await uploadImageToSupabase(
           garmentImage,
           "garment",
-          user?.id ?? `anon/${getAnonUserId()}`
+          user!.id
         );
       }
 
-      // Send prediction request
-      const runResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/run`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            model_name: "tryon-v1.6",
-            inputs: {
-              model_image: modelImageUrl,
-              garment_image: garmentImageUrl,
-              num_samples: 1, // this is the number of results variants, max is 4 min is 1 its 1 automatically
-            },
-          }),
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_FASHN_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!runResponse.ok) throw new Error("Failed to start try-on");
-
-      const { id: predictionId } = await runResponse.json();
-
-      // Poll for status
-      let status = "starting";
       let output: string[] = [];
+      // simulate api req when in dev to not drain api requests
+      if (process.env.NEXT_PUBLIC_USE_MOCK_API === "true") {
+        console.log("🔧 Using mock API response instead of real request");
 
-      while (status !== "completed" && status !== "failed") {
-        const statusResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/status/${predictionId}`,
+        // Simulate wait time
+        await new Promise((res) => setTimeout(res, 2000));
+
+        // Fake output (could be placeholder images in /public or from Unsplash)
+        output = ["/mock-results/mock-result.jpg"];
+      } else {
+        const runResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/run`,
           {
-            method: "GET",
+            method: "POST",
+            body: JSON.stringify({
+              model_name: "tryon-v1.6",
+              inputs: {
+                model_image: modelImageUrl,
+                garment_image: garmentImageUrl,
+                num_samples: 1, // this is the number of results variants, max is 4 min is 1 its 1 automatically
+              },
+            }),
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_FASHN_API_KEY}`,
+              "Content-Type": "application/json",
             },
           }
         );
+        // Send prediction request
 
-        if (!statusResponse.ok) {
-          throw new Error("Failed to fetch try-on status");
+        if (!runResponse.ok) throw new Error("Failed to start try-on");
+
+        const { id: predictionId } = await runResponse.json();
+
+        // Poll for status
+        let status = "starting";
+
+        while (status !== "completed" && status !== "failed") {
+          const statusResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_FASHN_BASE_URL}/status/${predictionId}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_FASHN_API_KEY}`,
+              },
+            }
+          );
+
+          if (!statusResponse.ok) {
+            throw new Error("Failed to fetch try-on status");
+          }
+
+          const statusData = await statusResponse.json();
+          status = statusData.status;
+
+          if (status === "completed") {
+            output = statusData.output;
+            break;
+          }
+
+          if (status === "failed") {
+            throw new Error(statusData.error.message);
+          }
+
+          // Wait before polling again
+          await new Promise((res) => setTimeout(res, 2500));
         }
-
-        const statusData = await statusResponse.json();
-        status = statusData.status;
-
-        if (status === "completed") {
-          output = statusData.output;
-          break;
-        }
-
-        if (status === "failed") {
-          throw new Error(statusData.error.message);
-        }
-
-        // Wait before polling again
-        await new Promise((res) => setTimeout(res, 2500));
       }
 
       // Upload result images to Supabase
       const uploadedResults = await Promise.all(
         output.map((url) =>
-          uploadImageFromUrlToSupabase(
-            url,
-            "results",
-            user?.id ?? `anon/${getAnonUserId()}`
-          )
+          uploadImageFromUrlToSupabase(url, "results", user!.id)
         )
       );
 
       if (user) {
         await decrementTrial();
         refetchGallery(user.id);
-      } else {
-        markAnonymousTrialUsed();
       }
 
       onResult(uploadedResults);
@@ -269,7 +283,17 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               <div className="flex flex-col gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => personInputRef.current?.click()}
+                  onClick={() => {
+                    if (!user) {
+                      setShowSignInModal(true);
+                      toast.error(
+                        "This feature is for signed-in users only. Sign in now and enjoy 3 free trials!",
+                        { ...TOAST_CONFIG.error }
+                      );
+                      return;
+                    }
+                    personInputRef.current?.click();
+                  }}
                   className="w-full"
                 >
                   {personImage ? "Change Photo" : "Upload Photo"}
@@ -348,7 +372,17 @@ export function TryOnForm({ onResult }: TryOnFormProps) {
               <div className="flex flex-col gap-2">
                 <Button
                   variant="outline"
-                  onClick={() => garmentInputRef.current?.click()}
+                  onClick={() => {
+                    if (!user) {
+                      setShowSignInModal(true);
+                      toast.error(
+                        "This feature is for signed-in users only. Sign in now and enjoy 3 free trials!",
+                        { ...TOAST_CONFIG.error }
+                      );
+                      return;
+                    }
+                    garmentInputRef.current?.click();
+                  }}
                   className="w-full"
                 >
                   {garmentImage ? "Change Garment" : "Choose Garment"}

@@ -32,7 +32,7 @@ export function SignInModal({ open, onOpenChange }: SignInModalProps) {
             />
           </DialogTitle>
           <DialogDescription className="text-center">
-            Sign up to get 2 free virtual try-ons and kickstart your style
+            Sign up to get 3 free virtual try-ons and kickstart your style
             journey!
           </DialogDescription>
         </DialogHeader>

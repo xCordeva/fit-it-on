@@ -21,14 +21,12 @@ import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/stores/useSidebarStore";
 import { useModalStore } from "@/stores/useModalStore";
 import { SignInModal } from "./SignInModal";
-import { useTrialsStore } from "@/stores/useTrialsStore";
 
 export default function Sidebar() {
   const { isCollapsed, toggleSidebarMenu } = useSidebarStore();
   const { setShowSignInModal, showSignInModal, setShowUpgradeModal } =
     useModalStore();
 
-  const { anonTrials } = useTrialsStore();
   const { user, signOut, userData } = useAuth();
   const { remainingTrials } = useTrials();
   const pathname = usePathname();
@@ -62,23 +60,17 @@ export default function Sidebar() {
           )}
         </Link>
 
-        <div
-          className={`text-sm text-gray-600 flex items-center justify-center transition-all m-0 p-0 duration-300 ${
-            isCollapsed ? "h-0 opacity-0" : "h-8 opacity-100"
-          }`}
-        >
-          {user ? (
-            // Show normal user-based trial count
-            <div>{remainingTrials} tries left</div>
-          ) : anonTrials === undefined ? (
-            // While loading
-
-            <span className="loader"></span>
-          ) : (
-            // Once loaded
-            <div className="text-sm text-gray-600">{anonTrials} tries left</div>
-          )}
-        </div>
+        {user ? (
+          <div
+            className={`text-sm text-gray-600 flex items-center justify-center transition-all m-0 p-0 duration-300 ${
+              isCollapsed ? "h-0 opacity-0" : "h-8 opacity-100"
+            }`}
+          >
+            {remainingTrials} tries left
+          </div>
+        ) : (
+          <></>
+        )}
 
         {!user || userData?.plan === "free" ? (
           <Button

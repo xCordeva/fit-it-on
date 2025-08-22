@@ -83,7 +83,7 @@ export default function SignUpCard({ modal = false }: { modal?: boolean }) {
             Create your account to start your virtual try-on journey!
           </p>
           <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm mt-2 ">
-            <Gift className="h-4 w-4" />2 Free Tries Included
+            <Gift className="h-4 w-4" />3 Free Tries Included
           </div>
         </CardHeader>
       )}
@@ -195,7 +195,7 @@ export default function SignUpCard({ modal = false }: { modal?: boolean }) {
             ) : (
               <>
                 <Gift className="mr-2 h-4 w-4" />
-                Create Account & Get 2 Free Tries
+                Create Account & Get 3 Free Tries
               </>
             )}
           </Button>
