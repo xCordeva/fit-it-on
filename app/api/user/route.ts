@@ -16,7 +16,14 @@ export async function GET() {
   if (!session || sessionError) {
     return NextResponse.json(
       { user: null, error: "Unauthorized" },
-      { status: 401 }
+      { 
+        status: 401,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+        }
+      }
     );
   }
 
@@ -29,7 +36,14 @@ export async function GET() {
   if (userError) {
     return NextResponse.json(
       { user: null, error: userError.message },
-      { status: 500 }
+      { 
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+        }
+      }
     );
   }
 
@@ -37,5 +51,24 @@ export async function GET() {
     session,
     user: session.user,
     userData,
+  }, {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+    }
+  });
+}
+
+// Handle OPTIONS request for CORS
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+      "Access-Control-Max-Age": "86400",
+    },
   });
 }
