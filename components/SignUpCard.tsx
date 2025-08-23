@@ -78,7 +78,7 @@ export default function SignUpCard({ modal = false }: { modal?: boolean }) {
               alt="fit-it-on-logo"
             />
           </div>
-          <CardTitle>Join FitItOn.io!</CardTitle>
+          <CardTitle>Join FitItOn.app!</CardTitle>
           <p className="text-gray-600">
             Create your account to start your virtual try-on journey!
           </p>
