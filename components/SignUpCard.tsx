@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { TOAST_CONFIG } from "@/lib/utils";
 import { useModalStore } from "@/stores/useModalStore";
+import SourcePreservingLink from "./SourcePreservingLink";
+import { useSourceParameter } from "@/hooks/useSourceParameter";
 
 type SignUpFormInputs = {
   name: string;
@@ -29,25 +31,22 @@ export default function SignUpCard({ modal = false }: { modal?: boolean }) {
 
   const { signUp, signInWithGoogle, signInWithFacebook } = useAuth();
   const router = useRouter();
-
   const { setShowSignInModal } = useModalStore();
+  const { getRedirectPath } = useSourceParameter();
 
   const onSubmit = async (data: SignUpFormInputs) => {
     try {
       const { error } = await signUp(data.email, data.password, data.name);
       if (error) throw error;
 
-      toast.success("Account created. You’re all set!", {
+      toast.success("Account created. You're all set!", {
         ...TOAST_CONFIG.success,
       });
-
-      const params = new URLSearchParams(window.location.search);
-      const isFromExtension = params.get("source") === "extension";
 
       if (modal) {
         setShowSignInModal(false);
       } else {
-        router.push(isFromExtension ? "/auth-success" : "/studio");
+        router.push(getRedirectPath());
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to create account", {
@@ -205,12 +204,12 @@ export default function SignUpCard({ modal = false }: { modal?: boolean }) {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
-              <Link
+              <SourcePreservingLink
                 href="/login"
                 className="text-secondary font-bold hover:underline"
               >
                 Sign in
-              </Link>
+              </SourcePreservingLink>
             </p>
           </div>
         )}

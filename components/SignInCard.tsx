@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { TOAST_CONFIG } from "@/lib/utils";
 import Image from "next/image";
 import { useModalStore } from "@/stores/useModalStore";
+import SourcePreservingLink from "./SourcePreservingLink";
+import { useSourceParameter } from "@/hooks/useSourceParameter";
 
 type LoginFormInputs = {
   email: string;
@@ -28,6 +30,8 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
   const { signIn, signInWithGoogle, signInWithFacebook } = useAuth();
   const router = useRouter();
   const { setShowSignInModal } = useModalStore();
+  const { getRedirectPath } = useSourceParameter();
+
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       const { error } = await signIn(data.email, data.password);
@@ -37,13 +41,10 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
         ...TOAST_CONFIG.success,
       });
 
-      const params = new URLSearchParams(window.location.search);
-      const isFromExtension = params.get("source") === "extension";
-
       if (modal) {
         setShowSignInModal(false);
       } else {
-        router.push(isFromExtension ? "/auth-success" : "/studio");
+        router.push(getRedirectPath());
       }
     } catch (error: any) {
       toast.error(error.message || "Failed to sign in", {
@@ -174,12 +175,12 @@ export default function SignInCard({ modal = false }: { modal?: boolean }) {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link
+              <SourcePreservingLink
                 href="/signup"
                 className="text-secondary hover:underline font-bold"
               >
                 Sign up for free
-              </Link>
+              </SourcePreservingLink>
             </p>
           </div>
         )}

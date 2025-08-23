@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useEffect } from "react";
 
 export default function AuthSuccessPage() {
@@ -19,9 +20,19 @@ export default function AuthSuccessPage() {
   }, []);
 
   return (
-    <div style={{ textAlign: "center", padding: "2rem" }}>
-      <h1>🎉 You’re now signed in!</h1>
-      <p>You can go back to the extension and continue where you left off.</p>
+    <div className="flex items-center justify-center h-screen flex-col text-center p-6">
+      <Image
+        src="/logo.png"
+        height={150}
+        width={150}
+        alt="Fit it on logo"
+        className="mb-8"
+      />
+      <h1 className="text-3xl font-bold mb-4">🎉 You’re now signed in!</h1>
+      <p className="text-lg font-semibold">
+        You can safely close this tab and return to the extension to continue
+        where you left off.
+      </p>
     </div>
   );
 }

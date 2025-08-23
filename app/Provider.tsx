@@ -104,9 +104,15 @@ export function AuthProvider({
 
     signInWithGoogle: async () => {
       setLoading(true);
+      const params = new URLSearchParams(window.location.search);
+      const isFromExtension = params.get("source") === "extension";
+      const redirectTo = isFromExtension
+        ? `${window.location.origin}/auth-success`
+        : `${window.location.origin}/studio`;
+
       const res = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${window.location.origin}/studio` },
+        options: { redirectTo },
       });
       setLoading(false);
       return res;
@@ -121,7 +127,7 @@ export function AuthProvider({
         : `${window.location.origin}/studio`;
 
       const res = await supabase.auth.signInWithOAuth({
-        provider: "google",
+        provider: "facebook",
         options: { redirectTo },
       });
       setLoading(false);
