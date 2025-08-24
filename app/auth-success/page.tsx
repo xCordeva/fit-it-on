@@ -4,19 +4,69 @@ import { useEffect } from "react";
 
 export default function AuthSuccessPage() {
   useEffect(() => {
-    try {
-      if (window.chrome?.runtime) {
-        chrome.runtime.sendMessage(
-          "kbeelmjkolnikchmjfioomnmnmdemidd",
-          { type: "LOGIN_SUCCESS" },
-          (response: any) => {
-            console.log("Extension acknowledged:", response);
+    async function sendUserDataToExtension() {
+      try {
+        if (window.chrome?.runtime) {
+          // Wait for session to be fully established
+          let attempts = 0;
+          const maxAttempts = 10;
+
+          while (attempts < maxAttempts) {
+            try {
+              const response = await fetch("/api/user", {
+                credentials: "include",
+              });
+
+              if (response.ok) {
+                const userData = await response.json();
+
+                // Send user data to extension
+                chrome.runtime.sendMessage(
+                  "kbeelmjkolnikchmjfioomnmnmdemidd",
+                  {
+                    type: "LOGIN_SUCCESS",
+                    userData: userData,
+                  },
+                  (response: any) => {}
+                );
+                return; // Success, exit the function
+              } else {
+                attempts++;
+                if (attempts < maxAttempts) {
+                  await new Promise((resolve) => setTimeout(resolve, 1000));
+                }
+              }
+            } catch (fetchError) {
+              attempts++;
+              if (attempts < maxAttempts) {
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+              }
+            }
           }
-        );
+
+          // If we get here, all attempts failed
+          // Fallback to just sending login success message
+          chrome.runtime.sendMessage(
+            "kbeelmjkolnikchmjfioomnmnmdemidd",
+            { type: "LOGIN_SUCCESS" },
+            (response: any) => {}
+          );
+        }
+      } catch (err) {
+        // Fallback to just sending login success message
+        try {
+          if (window.chrome?.runtime) {
+            chrome.runtime.sendMessage(
+              "kbeelmjkolnikchmjfioomnmnmdemidd",
+              { type: "LOGIN_SUCCESS" },
+              (response: any) => {}
+            );
+          }
+        } catch (fallbackErr) {}
       }
-    } catch (err) {
-      console.error("Unable to send message to extension:", err);
     }
+
+    sendUserDataToExtension();
   }, []);
 
   return (
