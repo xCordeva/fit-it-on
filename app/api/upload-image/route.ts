@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { uploadImageToSupabase } from "@/lib/tryOnHelpers";
 
 export async function POST(req: any) {
   try {
@@ -81,21 +82,16 @@ export async function POST(req: any) {
     }
 
     // Upload to Supabase
-    const filePath = `users/${session.user.id}/${fileType}/${Date.now()}-${
-      imageFile.name
-    }`;
 
-    const { data, error } = await supabase.storage
-      .from("user-uploads")
-      .upload(filePath, imageFile, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+    const url = await uploadImageToSupabase(
+      imageFile,
+      fileType,
+      session.user.id
+    );
 
-    if (error) {
-      console.error("Supabase upload error:", error);
+    if (!url) {
       return NextResponse.json(
-        { error: `Upload failed: ${error.message}` },
+        { error: `Upload failed` },
         {
           status: 500,
           headers: {
@@ -108,16 +104,10 @@ export async function POST(req: any) {
       );
     }
 
-    // Get public URL
-    const { data: publicUrlData } = supabase.storage
-      .from("user-uploads")
-      .getPublicUrl(filePath);
-
     return NextResponse.json(
       {
         success: true,
-        url: publicUrlData.publicUrl,
-        filePath,
+        url,
       },
       {
         headers: {

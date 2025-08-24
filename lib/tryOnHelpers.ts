@@ -1,12 +1,53 @@
 import { supabase } from "./supabaseClient";
 
+// Function to sanitize filename for Supabase storage
+export function sanitizeFilename(filename: string): string {
+  // Handle edge cases
+  if (!filename || filename.trim() === "") {
+    return "image.jpg";
+  }
+
+  // Remove or replace invalid characters for Supabase storage keys
+  // Supabase storage keys cannot contain: [ ] { } ( ) < > " " ' ` ~ ! @ # $ % ^ & * + = | \ : ; ? /
+  let sanitized = filename
+    .replace(/[\[\]{}()<>"'`~!@#$%^&*+=|\\:;?/]/g, "") // Remove invalid characters
+    .replace(/\s+/g, "_") // Replace spaces with underscores
+    .replace(/[^\w\-_.]/g, "_"); // Replace any other non-word characters with underscores
+
+  // Ensure the filename isn't too long (Supabase has limits)
+  if (sanitized.length > 100) {
+    const extension = sanitized.split(".").pop() || "jpg";
+    const nameWithoutExt = sanitized.substring(0, sanitized.lastIndexOf("."));
+    sanitized = nameWithoutExt.substring(0, 90) + "." + extension;
+  }
+
+  // Ensure the filename has a valid extension
+  if (!sanitized.includes(".")) {
+    sanitized += ".jpg";
+  }
+
+  return sanitized;
+}
+
 // this is used for user inputs, since a user would upload a file (image)
 export async function uploadImageToSupabase(
   file: File,
   fileType: string,
   userId: string
 ) {
-  const filePath = `users/${userId}/${fileType}/${Date.now()}-${file.name}`;
+  // Validate inputs
+  if (!userId || userId.trim() === "") {
+    throw new Error("User ID is required");
+  }
+
+  if (!fileType || !["person", "garment", "results"].includes(fileType)) {
+    throw new Error(
+      `Invalid fileType: ${fileType}. Must be one of: person, garment, results`
+    );
+  }
+
+  const sanitizedFilename = sanitizeFilename(file.name);
+  const filePath = `users/${userId}/${fileType}/${Date.now()}-${sanitizedFilename}`;
 
   const { data, error } = await supabase.storage
     .from("user-uploads")
@@ -104,6 +145,5 @@ export async function deleteImageFromSupabase(url: string) {
 // This extracts the relative path from the public URL
 function extractPathFromUrl(url: string): string {
   const parts = url.split("/user-uploads/");
-  console.log(parts[1]);
   return parts[1] || "";
 }

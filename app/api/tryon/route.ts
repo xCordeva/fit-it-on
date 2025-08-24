@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import {
+  sanitizeFilename,
   uploadBufferToSupabase,
   uploadImageFromUrlToSupabase,
 } from "@/lib/tryOnHelpers";
@@ -81,9 +82,10 @@ export async function POST(req: any) {
     const personImageBuffer = Buffer.from(await personImageFile.arrayBuffer());
 
     // Construct path for person image
-    const personImageFilePath = `users/${userId}/person/${Date.now()}-${
+    const sanitizedFilename = sanitizeFilename(
       personImageFile.name || "person-image.jpg"
-    }`;
+    );
+    const personImageFilePath = `users/${userId}/person/${Date.now()}-${sanitizedFilename}`;
 
     const modelImageUrl = await uploadBufferToSupabase(
       personImageBuffer,
